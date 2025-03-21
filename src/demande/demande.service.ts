@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDemandeDto } from './dto/create-demande.dto';
 import { UpdateDemandeDto } from './dto/update-demande.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -11,28 +11,45 @@ export class DemandeService {
     private demandeModel: typeof Demande,
   ) {}
 
-  create(createDemandeDto: CreateDemandeDto) {
-    return 'This action adds a new demande';
+  async create(createDemandeDto: CreateDemandeDto) {
+    const request = await this.demandeModel.create({ ...createDemandeDto });
+    return 'Request successfully created';
   }
 
   async findAll(): Promise<Demande[]> {
-    return this.demandeModel.findAll();
+    const requests = await this.demandeModel.findAll();
+    return requests
   }
 
-  findOne(id: string): Promise<Demande | null> {
-    return this.demandeModel.findOne({
-      where: {
-        id,
-      },
-    });
+  async findOne(id: string): Promise<Demande> {
+    const request = await this.demandeModel.findByPk(id);
+
+    if (!request) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Request with id ${id} does not exist`,
+      });
+    }
+
+    return request
   }
 
-  update(id: number, updateDemandeDto: UpdateDemandeDto) {
-    return `This action updates a #${id} demande`;
+  async update(id: string, updateDemandeDto: UpdateDemandeDto) : Promise<Demande> {
+    const request = await this.demandeModel.findByPk(id);
+
+    if (!request) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Request with id ${id} does not exist`,
+      });
+    }
+    await request.update(updateDemandeDto);
+    return request;
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string) {
     const demande = await this.findOne(id);
     await demande?.destroy();
+    return `Succesfully removed #${id} request`;
   }
 }

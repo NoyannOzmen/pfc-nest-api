@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAssociationDto } from './dto/create-association.dto';
 import { UpdateAssociationDto } from './dto/update-association.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -11,28 +11,46 @@ export class AssociationService {
     private associationModel: typeof Association,
   ) {}
 
-  create(createAssociationDto: CreateAssociationDto) {
-    return 'This action adds a new association';
+  async create(createAssociationDto: CreateAssociationDto) {
+    const shelter = await this.associationModel.create({ ...createAssociationDto });
+    return 'Shelter successfully created';
   }
 
   async findAll(): Promise<Association[]> {
-    return this.associationModel.findAll();
+    const shelters = this.associationModel.findAll();
+    return shelters
   }
 
-  findOne(id: string): Promise<Association | null> {
-    return this.associationModel.findOne({
-      where: {
-        id,
-      },
-    });
+  async findOne(id: string): Promise<Association> {
+    const shelter = await this.associationModel.findByPk(id);
+
+    if (!shelter) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Shelter with id ${id} does not exist`,
+      })
+    }
+
+    return shelter
   }
 
-  update(id: number, updateAssociationDto: UpdateAssociationDto) {
-    return `This action updates a #${id} association`;
+  async update(id: string, updateAssociationDto: UpdateAssociationDto) : Promise<Association> {
+    const shelter = await this.associationModel.findByPk(id);
+
+    if (!shelter) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Shelter with id ${id} does not exist`,
+      })
+    }
+    
+    await shelter.update(updateAssociationDto);
+    return shelter
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string) {
     const association = await this.findOne(id);
-    await association?.destroy();
+    await association.destroy();
+    return `Succesfully removed #${id} shelter`;
   }
 }

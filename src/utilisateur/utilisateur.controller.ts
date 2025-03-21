@@ -33,9 +33,8 @@ export class UtilisateurController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateUtilisateurDto: UpdateUtilisateurDto,
-  ) {
-    return this.utilisateurService.update(+id, updateUtilisateurDto);
+    @Body() updateUtilisateurDto: UpdateUtilisateurDto) {
+      return this.utilisateurService.update(id, updateUtilisateurDto);
   }
 
   @Delete(':id')

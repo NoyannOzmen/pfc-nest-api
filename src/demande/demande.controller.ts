@@ -31,8 +31,10 @@ export class DemandeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDemandeDto: UpdateDemandeDto) {
-    return this.demandeService.update(+id, updateDemandeDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateDemandeDto: UpdateDemandeDto) {
+      return this.demandeService.update(id, updateDemandeDto);
   }
 
   @Delete(':id')

@@ -31,8 +31,10 @@ export class EspeceController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEspeceDto: UpdateEspeceDto) {
-    return this.especeService.update(+id, updateEspeceDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateEspeceDto: UpdateEspeceDto) {
+      return this.especeService.update(id, updateEspeceDto);
   }
 
   @Delete(':id')

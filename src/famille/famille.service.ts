@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFamilleDto } from './dto/create-famille.dto';
 import { UpdateFamilleDto } from './dto/update-famille.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -11,28 +11,45 @@ export class FamilleService {
     private familleModel: typeof Famille,
   ) {}
 
-  create(createFamilleDto: CreateFamilleDto) {
-    return 'This action adds a new famille';
+  async create(CreateFamilleDto: CreateFamilleDto) {
+    const foster = await this.familleModel.create({ ...CreateFamilleDto });
+    return 'Foster successfully created';
   }
 
   async findAll(): Promise<Famille[]> {
-    return this.familleModel.findAll();
+    const fosters = await this.familleModel.findAll();
+    return fosters
   }
 
-  findOne(id: string): Promise<Famille | null> {
-    return this.familleModel.findOne({
-      where: {
-        id,
-      },
-    });
+  async findOne(id: string): Promise<Famille> {
+    const foster = await this.familleModel.findByPk(id);
+
+    if (!foster) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Foster with id ${id} does not exist`,
+      });
+    }
+
+    return foster
   }
 
-  update(id: number, updateFamilleDto: UpdateFamilleDto) {
-    return `This action updates a #${id} famille`;
+  async update(id: string, UpdateFamilleDto: UpdateFamilleDto) : Promise<Famille> {
+    const foster = await this.familleModel.findByPk(id);
+
+    if (!foster) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Foster with id ${id} does not exist`,
+      });
+    }
+    await foster.update(UpdateFamilleDto);
+    return foster;
   }
 
-  async remove(id: string): Promise<void> {
-    const famille = await this.findOne(id);
-    await famille?.destroy();
+  async remove(id: string) {
+    const foster = await this.findOne(id);
+    await foster.destroy();
+    return `Succesfully removed #${id} foster`;
   }
 }

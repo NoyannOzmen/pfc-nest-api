@@ -33,9 +33,8 @@ export class AssociationController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateAssociationDto: UpdateAssociationDto,
-  ) {
-    return this.associationService.update(+id, updateAssociationDto);
+    @Body() updateAssociationDto: UpdateAssociationDto) {
+    return this.associationService.update(id, updateAssociationDto);
   }
 
   @Delete(':id')

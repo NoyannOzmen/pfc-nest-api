@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEspeceDto } from './dto/create-espece.dto';
 import { UpdateEspeceDto } from './dto/update-espece.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -11,28 +11,45 @@ export class EspeceService {
     private especeModel: typeof Espece,
   ) {}
 
-  create(createEspeceDto: CreateEspeceDto) {
-    return 'This action adds a new espece';
+  async create(createEspeceDto: CreateEspeceDto) {
+    const espece = await this.especeModel.create({ ...createEspeceDto });
+    return 'Species successfully created';
   }
 
   async findAll(): Promise<Espece[]> {
-    return this.especeModel.findAll();
+    const especes = await this.especeModel.findAll();
+    return especes
   }
 
-  findOne(id: string): Promise<Espece | null> {
-    return this.especeModel.findOne({
-      where: {
-        id,
-      },
-    });
+  async findOne(id: string): Promise<Espece> {
+    const espece = await this.especeModel.findByPk(id);
+
+    if (!espece) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Species with id ${id} does not exist`,
+      });
+    }
+
+    return espece
   }
 
-  update(id: number, updateEspeceDto: UpdateEspeceDto) {
-    return `This action updates a #${id} espece`;
+  async update(id: string, updateEspeceDto: UpdateEspeceDto) : Promise<Espece> {
+    const espece = await this.especeModel.findByPk(id);
+
+    if (!espece) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Species with id ${id} does not exist`,
+      });
+    }
+    await espece.update(updateEspeceDto);
+    return espece;
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string) {
     const espece = await this.findOne(id);
-    await espece?.destroy();
+    await espece.destroy();
+    return `Succesfully removed #${id} species`;
   }
 }

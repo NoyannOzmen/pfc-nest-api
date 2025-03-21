@@ -12,14 +12,13 @@ export class AnimalService {
   ) {}
 
   async create(createAnimalDto: CreateAnimalDto) {
-    const user = await this.animalModel.create({ ...createAnimalDto });
+    const animal = await this.animalModel.create({ ...createAnimalDto });
     return 'Animal successfully created';
   }
 
   async findAll(): Promise<Animal[]> {
     const animals = await this.animalModel.findAll();
-    console.log(animals)
-    return animals;
+    return animals
   }
 
   async findOne(id: string): Promise<Animal> {
@@ -32,8 +31,9 @@ export class AnimalService {
       });
     }
 
-    return animal;
+    return animal
   }
+
   async update(id: string, updateAnimalDto: UpdateAnimalDto) : Promise<Animal> {
     const animal = await this.animalModel.findByPk(id);
 

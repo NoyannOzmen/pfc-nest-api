@@ -31,8 +31,10 @@ export class FamilleController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFamilleDto: UpdateFamilleDto) {
-    return this.familleService.update(+id, updateFamilleDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateFamilleDto: UpdateFamilleDto) {
+      return this.familleService.update(id, updateFamilleDto);
   }
 
   @Delete(':id')

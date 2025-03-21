@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUtilisateurDto } from './dto/create-utilisateur.dto';
 import { UpdateUtilisateurDto } from './dto/update-utilisateur.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -11,28 +11,46 @@ export class UtilisateurService {
     private utilisateurModel: typeof Utilisateur,
   ) {}
 
-  create(createUtilisateurDto: CreateUtilisateurDto) {
-    return 'This action adds a new utilisateur';
+
+  async create(createUtilisateurDto: CreateUtilisateurDto) {
+    const user = await this.utilisateurModel.create({ ...createUtilisateurDto });
+    return 'User successfully created';
   }
 
   async findAll(): Promise<Utilisateur[]> {
-    return this.utilisateurModel.findAll();
+    const users = await this.utilisateurModel.findAll();
+    return users
   }
 
-  findOne(id: string): Promise<Utilisateur | null> {
-    return this.utilisateurModel.findOne({
-      where: {
-        id,
-      },
-    });
+  async findOne(id: string): Promise<Utilisateur> {
+    const user = await this.utilisateurModel.findByPk(id);
+
+    if (!user) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `User with id ${id} does not exist`,
+      });
+    }
+
+    return user
   }
 
-  update(id: number, updateUtilisateurDto: UpdateUtilisateurDto) {
-    return `This action updates a #${id} utilisateur`;
+  async update(id: string, updateUtilisateurDto: UpdateUtilisateurDto) : Promise<Utilisateur> {
+    const user = await this.utilisateurModel.findByPk(id);
+
+    if (!user) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `User with id ${id} does not exist`,
+      });
+    }
+    await user.update(updateUtilisateurDto);
+    return user;
   }
 
-  async remove(id: string): Promise<void> {
-    const utilisateur = await this.findOne(id);
-    await utilisateur?.destroy();
+  async remove(id: string) {
+    const user = await this.findOne(id);
+    await user.destroy();
+    return `Succesfully removed #${id} User`;
   }
 }

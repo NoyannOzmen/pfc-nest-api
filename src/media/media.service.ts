@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -11,28 +11,46 @@ export class MediaService {
     private mediaModel: typeof Media,
   ) {}
 
-  create(createMediaDto: CreateMediaDto) {
-    return 'This action adds a new media';
+
+  async create(createMediaDto: CreateMediaDto) {
+    const media = await this.mediaModel.create({ ...createMediaDto });
+    return 'Media successfully created';
   }
 
   async findAll(): Promise<Media[]> {
-    return this.mediaModel.findAll();
+    const medias = await this.mediaModel.findAll();
+    return medias
   }
 
-  findOne(id: string): Promise<Media | null> {
-    return this.mediaModel.findOne({
-      where: {
-        id,
-      },
-    });
+  async findOne(id: string): Promise<Media> {
+    const media = await this.mediaModel.findByPk(id);
+
+    if (!media) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Media with id ${id} does not exist`,
+      });
+    }
+
+    return media
   }
 
-  update(id: number, updateMediaDto: UpdateMediaDto) {
-    return `This action updates a #${id} media`;
+  async update(id: string, updateMediaDto: UpdateMediaDto) : Promise<Media> {
+    const media = await this.mediaModel.findByPk(id);
+
+    if (!media) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Media with id ${id} does not exist`,
+      });
+    }
+    await media.update(updateMediaDto);
+    return media;
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string) {
     const media = await this.findOne(id);
-    await media?.destroy();
+    await media.destroy();
+    return `Succesfully removed #${id} Media`;
   }
 }
