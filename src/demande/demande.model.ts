@@ -9,31 +9,31 @@ export class Demande extends Model {
     values: ['En attente', 'Validée', 'Refusée'],
     allowNull: false,
   })
-  statut_demande: string;
+  declare statut_demande: string;
 
   @Column({
     type: DataType.DATE,
     allowNull: false,
   })
-  date_debut: Date;
+  declare date_debut: Date;
 
   @Column({
     type: DataType.DATE,
     allowNull: false,
   })
-  date_fin: Date;
+  declare date_fin: Date;
 
   @ForeignKey(() => Animal)
   @Column
-  animal_id: number;
+  declare animal_id: number;
   
   @BelongsTo(() => Animal)
-  animal: Animal;
+  declare animal: Animal;
 
   @ForeignKey(() => Famille)
   @Column
-  famille_id: number;
+  declare famille_id: number;
 
   @BelongsTo(() => Famille)
-  famille: Famille;
+  declare famille: Famille;
 }

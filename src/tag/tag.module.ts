@@ -7,7 +7,6 @@ import { Animal_Tag, Tag } from './tag.model';
 @Module({
   imports: [SequelizeModule.forFeature([Tag, Animal_Tag])],
   controllers: [TagController],
-  providers: [TagService],
-  exports: [SequelizeModule],
+  providers: [TagService]
 })
 export class TagModule {}

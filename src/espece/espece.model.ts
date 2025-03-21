@@ -7,8 +7,8 @@ export class Espece extends Model {
     type: DataType.TEXT,
     allowNull: false,
   })
-  nom: string;
+  declare nom: string;
 
   @HasMany(() => Animal)
-  representants: Animal[];
+  declare representants: Animal[];
 }

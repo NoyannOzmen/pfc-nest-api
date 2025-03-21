@@ -21,73 +21,73 @@ export class Animal extends Model {
     type: DataType.TEXT,
     allowNull: false,
   })
-  nom: string;
+  declare nom: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: true,
   })
-  race: string;
+  declare race: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  couleur: string;
+  declare couleur: string;
 
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  age: number;
+  declare age: number;
 
   @Column({
     type: DataType.ENUM,
     values: ['Mâle', 'Femelle', 'Inconnu'],
     allowNull: false,
   })
-  sexe: string;
+  declare sexe: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  description: string;
+  declare description: string;
 
   @Column({
     type: DataType.ENUM,
     values: ['En refuge', 'Accueilli', 'Adopté'],
     allowNull: false,
   })
-  statut: string;
+  declare statut: string;
 
   @ForeignKey(() => Espece)
   @Column
-  espece_id: number;
+  declare espece_id: number;
 
   @BelongsTo(() => Espece)
-  espece: Espece;
+  declare espece: Espece;
 
   @ForeignKey(() => Famille)
   @Column
-  famille_id: number;
+  declare famille_id: number;
 
   @BelongsTo(() => Famille)
-  accueillant: Famille;
+  declare accueillant: Famille;
 
   @ForeignKey(() => Association)
   @Column
-  association_id: number;
+  declare association_id: number;
 
   @BelongsTo(() => Association)
-  refuge: Association;
+  declare refuge: Association;
 
   @HasMany(() => Media)
-  images_animal: Media[];
+  declare images_animal: Media[];
 
   @BelongsToMany(() => Tag, () => Animal_Tag)
-  tags: Tag[];
+  declare tags: Tag[];
 
   @BelongsToMany(() => Famille, () => Demande)
-  potentiel_accueillant: Famille[];
+  declare potentiel_accueillant: Famille[];
 }

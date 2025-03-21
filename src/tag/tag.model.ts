@@ -14,25 +14,25 @@ export class Tag extends Model {
     type: DataType.TEXT,
     allowNull: false,
   })
-  nom: string;
+  declare nom: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  description: string;
+  declare description: string;
 
   @BelongsToMany(() => Animal, () => Animal_Tag)
-  animaux_taggés: Animal[];
+  declare animaux_taggés: Animal[];
 }
 
 @Table
 export class Animal_Tag extends Model {
   @ForeignKey(() => Animal)
   @Column
-  animal_id: number;
+  declare animal_id: number;
 
   @ForeignKey(() => Tag)
   @Column
-  tag_id: number;
+  declare tag_id: number;
 }

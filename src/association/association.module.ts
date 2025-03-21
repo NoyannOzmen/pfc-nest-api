@@ -7,7 +7,6 @@ import { Association } from './association.model';
 @Module({
   imports: [SequelizeModule.forFeature([Association])],
   controllers: [AssociationController],
-  providers: [AssociationService],
-  exports: [SequelizeModule],
+  providers: [AssociationService]
 })
 export class AssociationModule {}

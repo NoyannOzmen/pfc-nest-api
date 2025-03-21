@@ -7,7 +7,6 @@ import { Media } from './media.model';
 @Module({
   imports: [SequelizeModule.forFeature([Media])],
   controllers: [MediaController],
-  providers: [MediaService],
-  exports: [SequelizeModule],
+  providers: [MediaService]
 })
 export class MediaModule {}

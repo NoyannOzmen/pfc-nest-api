@@ -15,25 +15,25 @@ export class Media extends Model {
     type: DataType.TEXT,
     allowNull: false,
   })
-  url: string;
+  declare url: string;
 
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
   })
-  ordre: number;
+  declare ordre: number;
 
   @ForeignKey(() => Association)
   @Column
-  association_id: number;
+  declare association_id: number;
 
   @BelongsTo(() => Association)
-  association: Association;
+  declare association: Association;
 
   @ForeignKey(() => Animal)
   @Column
-  animal_id: number;
+  declare animal_id: number;
 
   @BelongsTo(() => Animal)
-  animal: Animal;
+  declare animal: Animal;
 }
