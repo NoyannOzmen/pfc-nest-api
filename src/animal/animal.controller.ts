@@ -6,15 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  Res
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { AnimalService } from './animal.service';
 import { CreateAnimalDto } from './dto/create-animal.dto';
 import { UpdateAnimalDto } from './dto/update-animal.dto';
+import { SearchBodyDto } from './dto/payload-dto';
 
 @Controller('animaux')
 export class AnimalController {
   constructor(private readonly animalService: AnimalService) {}
-
+  
+  @Post('/nouveau-profil')
+  //! Add logic
   @Post()
   create(@Body() createAnimalDto: CreateAnimalDto) {
     return this.animalService.create(createAnimalDto);
@@ -25,10 +31,25 @@ export class AnimalController {
     return this.animalService.findAll();
   }
 
+  @Post()
+  async search(
+    @Body() body: SearchBodyDto,
+    @Req() req: Request,
+    @Res({ passthrough : true}) res: Response,
+  ) {
+    return this.animalService.search(body)
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.animalService.findOne(id);
   }
+
+  @Post(':id/faire-une-demande')
+  //! Add logic
+
+  @Post('upload/photo')
+  //! Add logic
 
   @Patch(':id')
   update(

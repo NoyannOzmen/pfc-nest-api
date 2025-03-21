@@ -11,12 +11,13 @@ import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 
-@Controller('tag')
+@Controller('tags')
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 
-  @Post()
+  @Post('/create')
   create(@Body() createTagDto: CreateTagDto) {
+    //! Add logic
     return this.tagService.create(createTagDto);
   }
 

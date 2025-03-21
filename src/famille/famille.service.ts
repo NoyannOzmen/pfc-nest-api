@@ -11,6 +11,7 @@ export class FamilleService {
     private familleModel: typeof Famille,
   ) {}
 
+  //! SignUp
   async create(CreateFamilleDto: CreateFamilleDto) {
     const foster = await this.familleModel.create({ ...CreateFamilleDto });
     return 'Foster successfully created';
@@ -34,6 +35,7 @@ export class FamilleService {
     return foster
   }
 
+  //! Update profile
   async update(id: string, UpdateFamilleDto: UpdateFamilleDto) : Promise<Famille> {
     const foster = await this.familleModel.findByPk(id);
 
@@ -47,6 +49,7 @@ export class FamilleService {
     return foster;
   }
 
+  //! Delete profile
   async remove(id: string) {
     const foster = await this.findOne(id);
     await foster.destroy();

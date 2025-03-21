@@ -11,11 +11,13 @@ export class UtilisateurService {
     private utilisateurModel: typeof Utilisateur,
   ) {}
 
-
+  //! Link with role
   async create(createUtilisateurDto: CreateUtilisateurDto) {
     const user = await this.utilisateurModel.create({ ...createUtilisateurDto });
     return 'User successfully created';
   }
+
+  //! Login
 
   async findAll(): Promise<Utilisateur[]> {
     const users = await this.utilisateurModel.findAll();
@@ -48,6 +50,7 @@ export class UtilisateurService {
     return user;
   }
 
+  //! Link with role
   async remove(id: string) {
     const user = await this.findOne(id);
     await user.destroy();

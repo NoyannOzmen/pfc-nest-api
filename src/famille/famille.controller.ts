@@ -15,6 +15,8 @@ import { UpdateFamilleDto } from './dto/update-famille.dto';
 export class FamilleController {
   constructor(private readonly familleService: FamilleService) {}
 
+  @Post('/inscription')
+  //! Add Signup logic
   @Post()
   create(@Body() createFamilleDto: CreateFamilleDto) {
     return this.familleService.create(createFamilleDto);
@@ -30,6 +32,8 @@ export class FamilleController {
     return this.familleService.findOne(id);
   }
 
+  @Post('/profil')
+  //! Add update infos logic
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -37,6 +41,8 @@ export class FamilleController {
       return this.familleService.update(id, updateFamilleDto);
   }
 
+  @Post('/profil/delete')
+  //! Add delete account logic
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.familleService.remove(id);

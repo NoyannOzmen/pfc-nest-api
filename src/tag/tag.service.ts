@@ -11,7 +11,7 @@ export class TagService {
     private tagModel: typeof Tag,
   ) {}
 
-
+  //! Create Tag
   async create(createTagDto: CreateTagDto) {
     const tag = await this.tagModel.create({ ...createTagDto });
     return 'Tag successfully created';

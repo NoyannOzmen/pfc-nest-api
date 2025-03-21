@@ -15,10 +15,14 @@ import { UpdateUtilisateurDto } from './dto/update-utilisateur.dto';
 export class UtilisateurController {
   constructor(private readonly utilisateurService: UtilisateurService) {}
 
+  //! Link with role
   @Post()
   create(@Body() createUtilisateurDto: CreateUtilisateurDto) {
     return this.utilisateurService.create(createUtilisateurDto);
   }
+
+  @Post('/connexion')
+  //! Add login
 
   @Get()
   findAll() {
@@ -37,6 +41,7 @@ export class UtilisateurController {
       return this.utilisateurService.update(id, updateUtilisateurDto);
   }
 
+  //! Link with role
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.utilisateurService.remove(id);

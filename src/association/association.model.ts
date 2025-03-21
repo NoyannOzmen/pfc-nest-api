@@ -23,7 +23,7 @@ export class Association extends Model {
     type: DataType.TEXT,
     allowNull: false,
   })
-  declare esponsable: string;
+  declare responsable: string;
 
   @Column({
     type: DataType.TEXT,
