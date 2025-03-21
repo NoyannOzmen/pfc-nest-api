@@ -17,72 +17,72 @@ export class Association extends Model {
     type: DataType.TEXT,
     allowNull: false,
   })
-  nom: string;
+  declare nom: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  responsable: string;
+  declare esponsable: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  rue: string;
+  declare rue: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  commune: string;
+  declare commune: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  code_postal: string;
+  declare code_postal: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  pays: string;
+  declare pays: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  siret: string;
+  declare siret: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  telephone: string;
+  declare telephone: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: true,
   })
-  site: string;
+  declare site: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: true,
   })
-  description: string;
+  declare description: string;
 
   @HasMany(() => Animal)
-  pensionnaires: Animal[];
+  declare pensionnaires: Animal[];
 
   @HasMany(() => Media)
-  images_association: Media[];
+  declare images_association: Media[];
 
   @ForeignKey(() => Utilisateur)
   @Column
-  utilisateur_id: number;
+  declare utilisateur_id: number;
 
   @BelongsTo(() => Utilisateur)
-  identifiant_association: Utilisateur;
+  declare identifiant_association: Utilisateur;
 }

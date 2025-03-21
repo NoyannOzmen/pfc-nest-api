@@ -18,66 +18,66 @@ export class Famille extends Model {
     type: DataType.TEXT,
     allowNull: false,
   })
-  nom: string;
+  declare nom: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  prenom: string;
+  declare prenom: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  telephone: string;
+  declare telephone: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  rue: string;
+  declare rue: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  commune: string;
+  declare commune: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  code_postal: string;
+  declare code_postal: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  pays: string;
+  declare pays: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  hebergement: string;
+  declare hebergement: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: true,
   })
-  terrain: string;
+  declare terrain: string;
 
   @HasMany(() => Animal)
-  animaux: Animal[];
+  declare animaux: Animal[];
 
   @ForeignKey(() => Utilisateur)
   @Column
-  utilisateur_id: number;
+  declare utilisateur_id: number;
 
   @BelongsTo(() => Utilisateur)
-  identifiant_famille: Utilisateur;
+  declare identifiant_famille: Utilisateur;
 
   @BelongsToMany(() => Animal, () => Demande)
-  demandes: Animal[];
+  declare demandes: Animal[];
 }

@@ -8,6 +8,5 @@ import { Animal } from './animal.model';
   imports: [SequelizeModule.forFeature([Animal])],
   controllers: [AnimalController],
   providers: [AnimalService],
-  exports: [SequelizeModule],
 })
 export class AnimalModule {}

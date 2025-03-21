@@ -7,7 +7,6 @@ import { Famille } from './famille.model';
 @Module({
   imports: [SequelizeModule.forFeature([Famille])],
   controllers: [FamilleController],
-  providers: [FamilleService],
-  exports: [SequelizeModule],
+  providers: [FamilleService]
 })
 export class FamilleModule {}

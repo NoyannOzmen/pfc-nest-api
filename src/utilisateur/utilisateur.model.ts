@@ -8,17 +8,17 @@ export class Utilisateur extends Model {
     type: DataType.TEXT,
     allowNull: false,
   })
-  email: string;
+  declare email: string;
 
   @Column({
     type: DataType.TEXT,
     allowNull: false,
   })
-  mot_de_passe: string;
+  declare mot_de_passe: string;
 
   @HasOne(() => Association)
-  refuge: Association;
+  declare refuge: Association;
 
   @HasOne(() => Famille)
-  accueillant: Famille;
+  declare accueillant: Famille;
 }
