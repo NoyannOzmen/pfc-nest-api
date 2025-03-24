@@ -7,6 +7,7 @@ import { Demande } from './demande.model';
 @Module({
   imports: [SequelizeModule.forFeature([Demande])],
   controllers: [DemandeController],
-  providers: [DemandeService]
+  providers: [DemandeService],
+  exports: [DemandeService]
 })
 export class DemandeModule {}

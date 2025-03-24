@@ -13,18 +13,18 @@ export class UtilisateurService {
 
 
   async findByEmail(email: string): Promise<Utilisateur | null> {
-    return this.utilisateurModel.findOne({ where: { email } });
+    return this.utilisateurModel.findOne({
+      where: { email },
+      include : ["refuge", "accueillant"]
+    });
   }
 
-  //! Link with role (PENDING)
   async create(createUtilisateurDto: CreateUtilisateurDto) {
     const newUser = await this.utilisateurModel.create({ ...createUtilisateurDto });
     await newUser.save();
 
     return { message: 'User successfully created', newUser};
   }
-
-  //! Login
 
   async findAll(): Promise<Utilisateur[]> {
     const users = await this.utilisateurModel.findAll();
@@ -57,7 +57,6 @@ export class UtilisateurService {
     return user;
   }
 
-  //! Link with role
   async remove(id: string) {
     const user = await this.findOne(id);
     await user.destroy();

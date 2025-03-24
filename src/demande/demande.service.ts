@@ -3,6 +3,7 @@ import { CreateDemandeDto } from './dto/create-demande.dto';
 import { UpdateDemandeDto } from './dto/update-demande.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Demande } from './demande.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class DemandeService {
@@ -30,9 +31,18 @@ export class DemandeService {
         message: `Request with id ${id} does not exist`,
       });
     }
-
     return request
   }
+
+    async findByExisting(familleId: number, animalId : number): Promise<Demande | null> {
+      return this.demandeModel.findOne({
+        where :{ 
+          [Op.and] : [
+            {famille_id: familleId},
+            {animal_id: animalId}
+          ]}
+        })
+    }
 
   async update(id: string, updateDemandeDto: UpdateDemandeDto) : Promise<Demande> {
     const request = await this.demandeModel.findByPk(id);

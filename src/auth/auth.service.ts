@@ -12,21 +12,18 @@ export class AuthService {
 
   async signIn(
     email: string, 
-    mot_de_passe: string): Promise<{ access_token: string}> {
+    mot_de_passe: string): Promise<{ user : any, access_token: string}>{
     const user = await this.utilisateurService.findByEmail(email);
 
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    
-    const hasMatchingPassword = await bcrypt.compare(mot_de_passe, user.mot_de_passe);
+    if (user && await bcrypt.compare(mot_de_passe, user.mot_de_passe)) {
+      user.mot_de_passe = '';
+      const payload = { sub: user.id, email: user.email };
 
-    if (!hasMatchingPassword) {
-      throw new UnauthorizedException();
+      return {
+        user,
+        access_token: await this.jwtService.signAsync(payload),
+      }
     }
-    const payload = { sub: user.id, email: user.email };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    throw new UnauthorizedException();
   }
 }

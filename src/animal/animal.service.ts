@@ -10,12 +10,14 @@ import { Utilisateur } from 'src/utilisateur/utilisateur.model';
 import { Op } from 'sequelize';
 import { SearchBodyDto } from './dto/payload-dto';
 import { Media } from 'src/media/media.model';
+import { DemandeService } from 'src/demande/demande.service';
 
 @Injectable()
 export class AnimalService {
   constructor(
     @InjectModel(Animal)
     private animalModel: typeof Animal,
+    private demandeService : DemandeService
   ) {}
 
   //! Nouveau-profil
@@ -87,8 +89,36 @@ export class AnimalService {
   }
 
   //! Faire une demande
+  async hostRequest(id: string) {
+    const animalId = Number(id);
+    const familleId = 1;
+    //! REMOVE HARDCODED VALUE
 
-  //! Upload Picture
+    const animal = await this.animalModel.findByPk(id)
+
+    if (!animal) {
+      throw new NotFoundException();
+    }
+
+    const found = await this.demandeService.findByExisting(familleId, animalId);
+    
+    if (found) {
+      return { message : 'Vous avez déjà effectué une demande pour cet animal !' }
+    }
+
+    const date = new Date();
+    const newRequest = await this.demandeService.create({
+        famille_id : familleId,
+        animal_id : Number(animalId),
+        statut_demande:'En attente',
+        date_debut: date,
+        date_fin: new Date(date.setMonth(date.getMonth() + 8))
+    });
+    return {
+      message : 'Votre demande a bien été prise en compte !'
+    }
+  }
+
   async uploadPhoto(file: Express.Multer.File){
     let userImage = file.path;
     const trim = userImage.replace("./assets", "");

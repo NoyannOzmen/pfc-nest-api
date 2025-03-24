@@ -56,9 +56,10 @@ export class AnimalController {
   }
 
   @Post(':id/faire-une-demande')
-  //! Add logic
+  hostRequest(@Param('id') id:string) {
+    return this.animalService.hostRequest(id)
+  }
 
-  //! Add upload logic
   @Post('upload/photo')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(

@@ -19,7 +19,7 @@ export class FamilleController {
   ) {}
 
   @Public()
-  @Post('/inscription')
+  @Post('inscription')
   async register(
     @Body() createFamilleDto: CreateFamilleDto,
     @Body('email') email: string,
@@ -43,13 +43,10 @@ export class FamilleController {
     return this.familleService.findOne(id);
   }
 
-  @Post('/profil')
-  //! Add update infos logic
-  @Patch(':id')
+  @Post('profil')
   update(
-    @Param('id') id: string,
     @Body() updateFamilleDto: UpdateFamilleDto) {
-      return this.familleService.update(id, updateFamilleDto);
+      return this.familleService.update(updateFamilleDto);
   }
 
   @Post('/profil/delete')

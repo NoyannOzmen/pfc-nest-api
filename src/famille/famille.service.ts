@@ -14,7 +14,6 @@ export class FamilleService {
     private readonly utilisateurService: UtilisateurService
   ) {}
 
-  //! SignUp
   async registerFoster(email: string, mot_de_passe: string, confirmation: string, createFamilleDto: CreateFamilleDto) {
     if (mot_de_passe !== confirmation) {
       throw new BadRequestException('La confirmation du mot de passe ne correspond pas au mot de passe renseigné')
@@ -57,9 +56,12 @@ export class FamilleService {
     return foster
   }
 
-  //! Update profile
-  async update(id: string, UpdateFamilleDto: UpdateFamilleDto) : Promise<Famille> {
+  async update(updateFamilleDto: UpdateFamilleDto) : Promise<Famille> {
+    const id = 1
+    //! REMOVE HARDCODED
     const foster = await this.familleModel.findByPk(id);
+    console.log(foster);
+    console.log(UpdateFamilleDto)
 
     if (!foster) {
       throw new NotFoundException({
@@ -67,7 +69,7 @@ export class FamilleService {
         message: `Foster with id ${id} does not exist`,
       });
     }
-    await foster.update(UpdateFamilleDto);
+    await foster.update(updateFamilleDto);
     return foster;
   }
 
