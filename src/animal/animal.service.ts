@@ -9,6 +9,7 @@ import { Tag } from 'src/tag/tag.model';
 import { Utilisateur } from 'src/utilisateur/utilisateur.model';
 import { Op } from 'sequelize';
 import { SearchBodyDto } from './dto/payload-dto';
+import { Media } from 'src/media/media.model';
 
 @Injectable()
 export class AnimalService {
@@ -88,6 +89,33 @@ export class AnimalService {
   //! Faire une demande
 
   //! Upload Picture
+  async uploadPhoto(file: Express.Multer.File){
+    let userImage = file.path;
+    const trim = userImage.replace("./assets", "");
+    /* const animalId = req.body.animalId */;
+    //! REMOVE HARDCODED VALUE AFTER AUTH
+    const animalId = 1;
+
+    const animal = await this.animalModel.findByPk(animalId, {
+        include : 'images_animal'
+    });
+
+    if (!animal) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Animal with id ${animalId} does not exist`,
+      })
+    }
+
+    const newMedia = await Media.create({
+        animal_id : animal.id,
+        url : trim,
+        ordre : 1
+    })
+
+    await newMedia.save();
+    return { message : 'File uploaded successfully', animal}
+  }
 
   async update(id: string, updateAnimalDto: UpdateAnimalDto) : Promise<Animal> {
     const animal = await this.animalModel.findByPk(id);

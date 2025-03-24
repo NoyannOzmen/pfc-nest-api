@@ -7,13 +7,19 @@ import {
   Param,
   Delete,
   Req,
-  Res
+  Res,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipeBuilder,
+  HttpStatus
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AnimalService } from './animal.service';
 import { CreateAnimalDto } from './dto/create-animal.dto';
 import { UpdateAnimalDto } from './dto/update-animal.dto';
 import { SearchBodyDto } from './dto/payload-dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { SharpPipe } from 'src/pipes/sharp.pipe';
 
 @Controller('animaux')
 export class AnimalController {
@@ -48,8 +54,25 @@ export class AnimalController {
   @Post(':id/faire-une-demande')
   //! Add logic
 
+  //! Add upload logic
   @Post('upload/photo')
-  //! Add logic
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(
+    @UploadedFile(
+      SharpPipe,
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'image/(jpeg|jpg|gif|png|webp)', 
+        })
+        .addMaxSizeValidator({
+          maxSize: 5000
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+        })
+    ) file: Express.Multer.File) {
+    return this.animalService.uploadPhoto(file);
+  }
 
   @Patch(':id')
   update(

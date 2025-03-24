@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UploadedFile } from '@nestjs/common';
 import { CreateAssociationDto } from './dto/create-association.dto';
 import { UpdateAssociationDto } from './dto/update-association.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -8,6 +8,7 @@ import { SearchBodyDto } from './dto/payload-dto';
 import { Op } from 'sequelize';
 import { Espece } from 'src/espece/espece.model';
 import { Animal } from 'src/animal/animal.model';
+import { Media } from 'src/media/media.model';
 
 @Injectable()
 export class AssociationService {
@@ -84,6 +85,34 @@ export class AssociationService {
   }
 
   //! Upload logo
+  async uploadLogo(file: Express.Multer.File) {
+    let userImage = file.path;
+
+    const trim = userImage.replace("./assets", "");
+    /* const assoId = request.body.assoId; */
+    //! REMOVE HARDCODED VALUE AFTER AUTH
+    const assoId = 1;
+    
+    const association = await this.associationModel.findByPk(assoId, {
+        include : 'images_association'
+    });
+
+    if (!association) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Shelter with id ${assoId} does not exist`,
+      })
+    }
+      
+    const newMedia = await Media.create({
+        association_id : association.id,
+        url : trim,
+        ordre : 1
+    })
+      
+    await newMedia.save();
+    return { message : 'File uploaded successfully', association}
+  }
 
   //! Accept Request
 

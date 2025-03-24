@@ -7,13 +7,24 @@ import {
   Param,
   Delete,
   Req,
-  Res
+  Res,
+  ParseFilePipeBuilder,
+  UploadedFile,
+  UseInterceptors,
+  HttpStatus,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterModule } from '@nestjs/platform-express';
+import { Express, Request, Response } from 'express';
 import { AssociationService } from './association.service';
 import { CreateAssociationDto } from './dto/create-association.dto';
 import { UpdateAssociationDto } from './dto/update-association.dto';
 import { SearchBodyDto } from './dto/payload-dto';
+import { SharpPipe } from '../pipes/sharp.pipe';
+
+MulterModule.register({
+  dest: '../assets/upload'
+});
 
 @Controller('association')
 export class AssociationController {
@@ -55,8 +66,25 @@ export class AssociationController {
     return this.associationService.update(id, updateAssociationDto);
   }
 
+    //! Add upload logic
   @Post('/upload/logo')
-  //! Add upload logic
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(
+    @UploadedFile(
+      SharpPipe,
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'image/(jpeg|jpg|gif|png|webp)', 
+        })
+        .addMaxSizeValidator({
+          maxSize: 5000
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+        })
+    ) file: Express.Multer.File) {
+    return this.associationService.uploadLogo(file);
+  }
 
   @Post('/profil/demandes/:id/accept')
   //! Add request logic
