@@ -50,9 +50,7 @@ export class FamilleController {
   }
 
   @Post('/profil/delete')
-  //! Add delete account logic
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.familleService.remove(id);
+  remove() {
+    return this.familleService.deleteFosterAccount();
   }
 }

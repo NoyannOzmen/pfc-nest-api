@@ -20,7 +20,6 @@ export class AssociationService {
     private readonly utilisateurService: UtilisateurService
   ) {}
 
-  //! Signup
   async registerShelter(
     email: string,
     mot_de_passe: string,
@@ -82,7 +81,8 @@ export class AssociationService {
     const shelter = await this.associationModel.findByPk(id, {
       include : [
         "images_association",
-        { model : Utilisateur, attributes : ['email']}
+        { model : Utilisateur, attributes : ['email']},
+        { model : Animal, as : "pensionnaires"}
       ]
     });
 
@@ -96,8 +96,9 @@ export class AssociationService {
     return shelter
   }
 
-  //! Profile update
-  async update(id: string, updateAssociationDto: UpdateAssociationDto) : Promise<Association> {
+  async update(updateAssociationDto: UpdateAssociationDto) : Promise<Association> {
+    const id = 1
+    //! REMOVE HARDCODED
     const shelter = await this.associationModel.findByPk(id);
 
     if (!shelter) {
@@ -111,7 +112,6 @@ export class AssociationService {
     return shelter
   }
 
-  //! Upload logo
   async uploadLogo(file: Express.Multer.File) {
     let userImage = file.path;
 
@@ -145,10 +145,20 @@ export class AssociationService {
 
   //! Deny Request
 
-  //! Delete profile
-  async remove(id: string) {
-    const association = await this.findOne(id);
-    await association.destroy();
-    return `Succesfully removed #${id} shelter`;
+  async deleteShelterAccount() {
+    const id = 1
+    //! REMOVE HARDCODED
+    const shelter = await this.findOne(id.toString());
+
+    if (shelter.pensionnaires.length) {
+      return { message : 'Vous accueillez actuellement un ou plusieurs animaux enregistrés sur notre site. Merci de contacter le refuge concerné avant de supprimer votre compte !'}
+    }
+
+    const user = await this.utilisateurService.findOne(shelter.identifiant_association.id)
+
+    await shelter.destroy();
+    await user.destroy();
+
+    return { message : 'Account successfully deleted' };
   }
 }

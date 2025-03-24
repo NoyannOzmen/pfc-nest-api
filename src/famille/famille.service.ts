@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Famille } from './famille.model';
 import * as bcrypt from 'bcrypt';
 import { UtilisateurService } from '../utilisateur/utilisateur.service';
+import { Animal } from 'src/animal/animal.model';
 
 @Injectable()
 export class FamilleService {
@@ -44,7 +45,11 @@ export class FamilleService {
   }
 
   async findOne(id: string): Promise<Famille> {
-    const foster = await this.familleModel.findByPk(id);
+    const foster = await this.familleModel.findByPk(id, { 
+      include : [
+        {model: Animal, as: "animaux"}
+      ]
+    });
 
     if (!foster) {
       throw new NotFoundException({
@@ -60,8 +65,6 @@ export class FamilleService {
     const id = 1
     //! REMOVE HARDCODED
     const foster = await this.familleModel.findByPk(id);
-    console.log(foster);
-    console.log(UpdateFamilleDto)
 
     if (!foster) {
       throw new NotFoundException({
@@ -73,10 +76,20 @@ export class FamilleService {
     return foster;
   }
 
-  //! Delete profile
-  async remove(id: string) {
-    const foster = await this.findOne(id);
+  async deleteFosterAccount() {
+    const id = 1;
+    //! REMOVE HARDCODED
+    const foster = await this.findOne(id.toString());
+
+    if (foster.animaux.length) {
+      return { message : 'Vous accueillez actuellement un animal. Merci de contacter le refuge concerné avant de supprimer votre compte !'}
+    }
+
+    const user = await this.utilisateurService.findOne(foster.identifiant_famille.id)
+
     await foster.destroy();
-    return `Succesfully removed #${id} foster`;
+    await user.destroy();
+
+    return { message : 'Account successfully deleted' };
   }
 }

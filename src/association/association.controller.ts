@@ -69,12 +69,9 @@ export class AssociationController {
   }
 
   @Post('association/profil')
-  //! Add update infos logic
-  @Patch(':id')
   update(
-    @Param('id') id: string,
     @Body() updateAssociationDto: UpdateAssociationDto) {
-    return this.associationService.update(id, updateAssociationDto);
+    return this.associationService.update(updateAssociationDto);
   }
 
   //! Add upload logic
@@ -104,9 +101,7 @@ export class AssociationController {
   //! Add request logic
 
   @Post('association/profil/delete')
-  //! Add delete account logic
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.associationService.remove(id);
+  remove() {
+    return this.associationService.deleteShelterAccount();
   }
 }
