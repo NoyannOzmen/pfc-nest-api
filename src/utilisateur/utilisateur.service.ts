@@ -11,10 +11,17 @@ export class UtilisateurService {
     private utilisateurModel: typeof Utilisateur,
   ) {}
 
-  //! Link with role
+
+  async findByEmail(email: string): Promise<Utilisateur | null> {
+    return this.utilisateurModel.findOne({ where: { email } });
+  }
+
+  //! Link with role (PENDING)
   async create(createUtilisateurDto: CreateUtilisateurDto) {
-    const user = await this.utilisateurModel.create({ ...createUtilisateurDto });
-    return 'User successfully created';
+    const newUser = await this.utilisateurModel.create({ ...createUtilisateurDto });
+    await newUser.save();
+
+    return { message: 'User successfully created', newUser};
   }
 
   //! Login

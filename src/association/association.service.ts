@@ -1,25 +1,52 @@
-import { Injectable, NotFoundException, UploadedFile } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UploadedFile } from '@nestjs/common';
 import { CreateAssociationDto } from './dto/create-association.dto';
 import { UpdateAssociationDto } from './dto/update-association.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Association } from './association.model';
-import { Utilisateur } from 'src/utilisateur/utilisateur.model';
+import { Utilisateur } from '../utilisateur/utilisateur.model';
 import { SearchBodyDto } from './dto/payload-dto';
 import { Op } from 'sequelize';
-import { Espece } from 'src/espece/espece.model';
-import { Animal } from 'src/animal/animal.model';
-import { Media } from 'src/media/media.model';
+import { Espece } from '../espece/espece.model';
+import { Animal } from '../animal/animal.model';
+import { Media } from '../media/media.model';
+import { UtilisateurService } from '../utilisateur/utilisateur.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AssociationService {
   constructor(
     @InjectModel(Association)
     private associationModel: typeof Association,
+    private readonly utilisateurService: UtilisateurService
   ) {}
 
   //! Signup
-  async create(createAssociationDto: CreateAssociationDto) {
-    const shelter = await this.associationModel.create({ ...createAssociationDto });
+  async registerShelter(
+    email: string,
+    mot_de_passe: string,
+    confirmation: string,
+    createAssociationDto: CreateAssociationDto
+  ) {
+    if (mot_de_passe !== confirmation) {
+      throw new BadRequestException('La confirmation du mot de passe ne correspond pas au mot de passe renseigné')
+    }
+    
+    const found = await this.utilisateurService.findByEmail(email);
+
+    if (found) {
+      throw new BadRequestException('Cannot proceed')
+    }
+
+    const hashedPassword = await bcrypt.hash(mot_de_passe, 8);
+
+    const newUser = await this.utilisateurService.create({
+      email: email,
+      mot_de_passe : hashedPassword,
+    })
+
+    const newShelter = await this.associationModel.create({ ...createAssociationDto });
+    await newShelter.save();
+    
     return 'Shelter successfully created';
   }
 

@@ -32,10 +32,17 @@ export class AssociationController {
 
 
   @Post('/inscription')
-  //! Add Signup logic  
-  @Post()
-  create(@Body() createAssociationDto: CreateAssociationDto) {
-    return this.associationService.create(createAssociationDto);
+  async register(
+    @Body() createAssociationDto: CreateAssociationDto,
+    @Body('email') email: string,
+    @Body('password') mot_de_passe: string,
+    @Body('confirmation') confirmation: string,
+  ) {
+    return this.associationService.registerShelter(
+      email, 
+      mot_de_passe, 
+      confirmation, 
+      createAssociationDto);
   }
 
   @Get()

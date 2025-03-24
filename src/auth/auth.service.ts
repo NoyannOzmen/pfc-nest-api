@@ -6,14 +6,14 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UtilisateurService,
+    private utilisateurService: UtilisateurService,
     private jwtService: JwtService
   ) {}
 
   async signIn(
     email: string, 
     mot_de_passe: string): Promise<{ access_token: string}> {
-    const user = await this.usersService.findOne(email);
+    const user = await this.utilisateurService.findOne(email);
 
     if (!user) {
       throw new UnauthorizedException();

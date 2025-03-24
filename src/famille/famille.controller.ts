@@ -13,13 +13,22 @@ import { UpdateFamilleDto } from './dto/update-famille.dto';
 
 @Controller('famille')
 export class FamilleController {
-  constructor(private readonly familleService: FamilleService) {}
+  constructor(
+    private readonly familleService: FamilleService,
+  ) {}
 
   @Post('/inscription')
-  //! Add Signup logic
-  @Post()
-  create(@Body() createFamilleDto: CreateFamilleDto) {
-    return this.familleService.create(createFamilleDto);
+  async register(
+    @Body() createFamilleDto: CreateFamilleDto,
+    @Body('email') email: string,
+    @Body('password') mot_de_passe: string,
+    @Body('confirmation') confirmation: string,
+  ) {
+    return this.familleService.registerFoster(
+      email, 
+      mot_de_passe, 
+      confirmation, 
+      createFamilleDto);
   }
 
   @Get()
