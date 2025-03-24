@@ -66,7 +66,7 @@ export class AssociationController {
     return this.associationService.update(id, updateAssociationDto);
   }
 
-    //! Add upload logic
+  //! Add upload logic
   @Post('/upload/logo')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(

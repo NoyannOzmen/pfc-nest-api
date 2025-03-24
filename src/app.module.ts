@@ -19,6 +19,7 @@ import { Famille } from './famille/famille.model';
 import { Media } from './media/media.model';
 import { Animal_Tag, Tag } from './tag/tag.model';
 import { Utilisateur } from './utilisateur/utilisateur.model';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { Utilisateur } from './utilisateur/utilisateur.model';
     MediaModule,
     TagModule,
     UtilisateurModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
