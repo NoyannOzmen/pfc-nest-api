@@ -18,7 +18,6 @@ export class TagController {
 
   @Post('/create')
   create(@Body() createTagDto: CreateTagDto) {
-    //! Add logic
     return this.tagService.create(createTagDto);
   }
 

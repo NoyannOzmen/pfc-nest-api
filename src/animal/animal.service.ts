@@ -11,19 +11,48 @@ import { Op } from 'sequelize';
 import { SearchBodyDto } from './dto/payload-dto';
 import { Media } from 'src/media/media.model';
 import { DemandeService } from 'src/demande/demande.service';
+import { TagService } from 'src/tag/tag.service';
+import { MediaService } from 'src/media/media.service';
 
 @Injectable()
 export class AnimalService {
   constructor(
     @InjectModel(Animal)
     private animalModel: typeof Animal,
-    private demandeService : DemandeService
+    private demandeService : DemandeService,
+    private tagService : TagService,
+    private mediaService : MediaService
   ) {}
 
-  //! Nouveau-profil
-
   async create(createAnimalDto: CreateAnimalDto) {
-    const animal = await this.animalModel.create({ ...createAnimalDto });
+    const shelterId = 1
+    //! REMOVE HARDCODED
+    const tagCount = await this.tagService.count();
+    const tagIdArray = [];
+
+    for (let i = 0; i < tagCount; i++) {
+      const hasProperty = Object.hasOwn(createAnimalDto,`tag_${i+1}`);
+      if (hasProperty){
+          tagIdArray.push(createAnimalDto.`tag_${i+1}`);
+      }
+    }
+    createAnimalDto.association_id = shelterId;
+    createAnimalDto.statut = 'En refuge'
+    
+    const newAnimal = await this.animalModel.create({ ...createAnimalDto });
+    const newMedia = await this.mediaService.create({
+      association_id : null,
+      animal_id : newAnimal.id,
+      url: "/images/animal_empty.webp",
+      ordre: 1
+    })
+
+    if (tagIdArray) {
+      for (const tagId of tagIdArray) {
+          await this.tagService.addTag(newAnimal.id, tagId)
+      }
+  }
+
     return 'Animal successfully created';
   }
 
@@ -88,7 +117,6 @@ export class AnimalService {
     return animal
   }
 
-  //! Faire une demande
   async hostRequest(id: string) {
     const animalId = Number(id);
     const familleId = 1;

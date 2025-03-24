@@ -1,6 +1,6 @@
 export class CreateMediaDto {
-  readonly animal_id: number;
-  readonly association_id: number;
+  readonly animal_id: number | null;
+  readonly association_id: number | null;
   readonly url: string;
-  readonly ordre: string;
+  readonly ordre: number;
 }

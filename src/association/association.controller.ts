@@ -74,7 +74,6 @@ export class AssociationController {
     return this.associationService.update(updateAssociationDto);
   }
 
-  //! Add upload logic
   @Post('/upload/logo')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
@@ -95,10 +94,14 @@ export class AssociationController {
   }
 
   @Post('association/profil/demandes/:id/accept')
-  //! Add request logic
+  accept(@Param('id') id: string) {
+    return this.associationService.acceptRequest(id)
+  }
 
   @Post('association/profil/demandes/:id/deny')
-  //! Add request logic
+  deny(@Param('id') id: string) {
+    return this.associationService.denyRequest(id)
+  }
 
   @Post('association/profil/delete')
   remove() {

@@ -27,8 +27,6 @@ export class AnimalController {
   constructor(private readonly animalService: AnimalService) {}
   
   @Post('/nouveau-profil')
-  //! Add logic
-  @Post()
   create(@Body() createAnimalDto: CreateAnimalDto) {
     return this.animalService.create(createAnimalDto);
   }

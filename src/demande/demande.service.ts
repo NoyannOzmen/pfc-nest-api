@@ -44,6 +44,17 @@ export class DemandeService {
         })
     }
 
+    async findOthers(animalId : number, id : number) : Promise<Demande[] | null> {
+      return this.demandeModel.findAll({
+        where :{
+          animal_id: animalId,
+          [Op.not]: {
+              id : id
+          }
+      }
+      })
+    }
+
   async update(id: string, updateDemandeDto: UpdateDemandeDto) : Promise<Demande> {
     const request = await this.demandeModel.findByPk(id);
 

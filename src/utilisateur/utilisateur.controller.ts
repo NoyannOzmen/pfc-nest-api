@@ -39,7 +39,6 @@ export class UtilisateurController {
       return this.utilisateurService.update(id, updateUtilisateurDto);
   }
 
-  //! Link with role
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.utilisateurService.remove(id);

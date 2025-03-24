@@ -10,14 +10,18 @@ import { Espece } from '../espece/espece.model';
 import { Animal } from '../animal/animal.model';
 import { Media } from '../media/media.model';
 import { UtilisateurService } from '../utilisateur/utilisateur.service';
+import { DemandeService } from 'src/demande/demande.service';
 import * as bcrypt from 'bcrypt';
+import { AnimalService } from 'src/animal/animal.service';
 
 @Injectable()
 export class AssociationService {
   constructor(
     @InjectModel(Association)
     private associationModel: typeof Association,
-    private readonly utilisateurService: UtilisateurService
+    private readonly utilisateurService: UtilisateurService,
+    private readonly demandeService: DemandeService,
+    private readonly animalService: AnimalService
   ) {}
 
   async registerShelter(
@@ -141,9 +145,43 @@ export class AssociationService {
     return { message : 'File uploaded successfully', association}
   }
 
-  //! Accept Request
+  async acceptRequest(id: string) {
+    const request = await this.demandeService.findOne(id);
+    
+    await request.update({
+        statut_demande : 'Validée'
+    });
+    await request.save();
+    
+    
+    const otherRequests = await this.demandeService.findOthers(request.animal_id, Number(id))
 
-  //! Deny Request
+    if (otherRequests) {
+      for (const demande of otherRequests) {
+        await demande.update({
+            statut_demande:"Refusée"
+        });
+        await demande.save();    
+      }
+    }
+
+    const animal = await this.animalService.findOne((request.animal_id).toString());
+    await animal.update({famille_id:request.famille_id});
+    await animal.save();
+    
+    return { message : 'Accepted request'}
+  }
+
+  async denyRequest(id: string) {
+    const request = await this.demandeService.findOne(id);
+    
+    const updatedRequest = await request.update({
+        statut_demande : 'Refusée'
+    });
+    
+    await updatedRequest.save();
+    return 'Denied request'
+  }
 
   async deleteShelterAccount() {
     const id = 1
