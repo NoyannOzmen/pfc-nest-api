@@ -22,6 +22,8 @@ import { UpdateAssociationDto } from './dto/update-association.dto';
 import { SearchBodyDto } from './dto/payload-dto';
 import { SharpPipe } from '../pipes/sharp.pipe';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { AnimalService } from 'src/animal/animal.service';
+import { DemandeService } from 'src/demande/demande.service';
 
 MulterModule.register({
   dest: '../assets/upload'
@@ -29,7 +31,11 @@ MulterModule.register({
 
 @Controller('associations')
 export class AssociationController {
-  constructor(private readonly associationService: AssociationService) {}
+  constructor(
+    private readonly associationService: AssociationService,
+    private readonly animalService: AnimalService,
+    private readonly demandeService: DemandeService
+  ) {}
 
   @Public()
   @Post('association/inscription')
@@ -74,6 +80,16 @@ export class AssociationController {
     return this.associationService.update(updateAssociationDto);
   }
 
+  @Get('association/profil/animaux/:id')
+  residentDetails(@Param('id') id: string) {
+    return this.animalService.findOne(id)
+  }
+
+  @Get('association/profil/demandes/:id')
+  requestDetails(@Param('id') id: string) {
+    return this.demandeService.findOne(id)
+  }
+
   @Post('/upload/logo')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
@@ -93,12 +109,12 @@ export class AssociationController {
     return this.associationService.uploadLogo(file);
   }
 
-  @Post('association/profil/demandes/:id/accept')
+  @Post('/associations/profil/demandes/:id/accept')
   accept(@Param('id') id: string) {
     return this.associationService.acceptRequest(id)
   }
 
-  @Post('association/profil/demandes/:id/deny')
+  @Post('/associations/profil/demandes/:id/deny')
   deny(@Param('id') id: string) {
     return this.associationService.denyRequest(id)
   }

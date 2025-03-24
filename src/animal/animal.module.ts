@@ -4,13 +4,22 @@ import { AnimalController } from './animal.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Animal } from './animal.model';
 import { DemandeModule } from 'src/demande/demande.module';
+import { TagModule } from 'src/tag/tag.module';
+import { MediaModule } from 'src/media/media.module';
+import { AnimalTagModule } from 'src/animal_tag/animal_tag.module';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([Animal]),
-    DemandeModule
+    DemandeModule,
+    TagModule,
+    MediaModule,
+    AnimalTagModule
   ],
   controllers: [AnimalController],
-  providers: [AnimalService],
+  providers: [
+    AnimalService,
+  ],
+  exports: [ AnimalService]
 })
 export class AnimalModule {}

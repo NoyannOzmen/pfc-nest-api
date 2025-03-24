@@ -2,14 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { InjectModel } from '@nestjs/sequelize';
-import { Animal_Tag, Tag } from './tag.model';
+import { Tag } from './tag.model';
 
 @Injectable()
 export class TagService {
   constructor(
     @InjectModel(Tag)
-    private tagModel: typeof Tag,
-    private animalTagModel: typeof Animal_Tag
+    private tagModel: typeof Tag
   ) {}
 
   async create(createTagDto: CreateTagDto) {
@@ -37,14 +36,6 @@ export class TagService {
 
   async count() {
     return await this.tagModel.count();
-  }
-
-  async addTag(id : number, tagId : number) {
-    await this.animalTagModel.create({
-      animal_id : id,
-      tag_id : tagId,
-    })
-
   }
 
   async update(id: string, updateTagDto: UpdateTagDto) : Promise<Tag> {

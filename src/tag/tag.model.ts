@@ -4,9 +4,9 @@ import {
   Model,
   DataType,
   BelongsToMany,
-  ForeignKey,
 } from 'sequelize-typescript';
 import { Animal } from 'src/animal/animal.model';
+import { Animal_Tag } from 'src/animal_tag/animal_tag.model';
 
 @Table
 export class Tag extends Model {
@@ -24,15 +24,4 @@ export class Tag extends Model {
 
   @BelongsToMany(() => Animal, () => Animal_Tag)
   declare animaux_taggés: Animal[];
-}
-
-@Table
-export class Animal_Tag extends Model {
-  @ForeignKey(() => Animal)
-  @Column
-  declare animal_id: number;
-
-  @ForeignKey(() => Tag)
-  @Column
-  declare tag_id: number;
 }

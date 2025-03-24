@@ -11,6 +11,7 @@ import { UtilisateurModule } from 'src/utilisateur/utilisateur.module';
     UtilisateurModule
   ],
   controllers: [FamilleController],
-  providers: [FamilleService]
+  providers: [FamilleService],
+  exports: [FamilleService]
 })
 export class FamilleModule {}

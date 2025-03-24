@@ -13,6 +13,8 @@ import { Media } from 'src/media/media.model';
 import { DemandeService } from 'src/demande/demande.service';
 import { TagService } from 'src/tag/tag.service';
 import { MediaService } from 'src/media/media.service';
+import { AnimalTagService } from 'src/animal_tag/animal_tag.service';
+import { Demande } from 'src/demande/demande.model';
 
 @Injectable()
 export class AnimalService {
@@ -21,7 +23,8 @@ export class AnimalService {
     private animalModel: typeof Animal,
     private demandeService : DemandeService,
     private tagService : TagService,
-    private mediaService : MediaService
+    private mediaService : MediaService,
+    private animalTagService: AnimalTagService
   ) {}
 
   async create(createAnimalDto: CreateAnimalDto) {
@@ -49,7 +52,7 @@ export class AnimalService {
 
     if (tagIdArray) {
       for (const tagId of tagIdArray) {
-          await this.tagService.addTag(newAnimal.id, tagId)
+          await this.animalTagService.addTag(newAnimal.id, tagId)
       }
   }
 
@@ -61,6 +64,7 @@ export class AnimalService {
       include: [
         "espece",
         "images_animal",
+        "demandes",
         { model : Association, as : "refuge", include: ["images_association", { model: Utilisateur, attributes: ['email']}]},
         { model : Famille, as : "accueillant", include: [{ model: Utilisateur, attributes: ['email']}]},
         { model : Tag, as : "tags" },
