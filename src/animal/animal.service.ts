@@ -28,12 +28,12 @@ export class AnimalService {
     const shelterId = 1
     //! REMOVE HARDCODED
     const tagCount = await this.tagService.count();
-    const tagIdArray = [];
+    const tagIdArray = [] as Array<number>;
 
     for (let i = 0; i < tagCount; i++) {
       const hasProperty = Object.hasOwn(createAnimalDto,`tag_${i+1}`);
       if (hasProperty){
-          tagIdArray.push(createAnimalDto.`tag_${i+1}`);
+          tagIdArray.push(parseInt(createAnimalDto[`tag_${i+1}`]));
       }
     }
     createAnimalDto.association_id = shelterId;
