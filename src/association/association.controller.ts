@@ -21,6 +21,7 @@ import { CreateAssociationDto } from './dto/create-association.dto';
 import { UpdateAssociationDto } from './dto/update-association.dto';
 import { SearchBodyDto } from './dto/payload-dto';
 import { SharpPipe } from '../pipes/sharp.pipe';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 MulterModule.register({
   dest: '../assets/upload'
@@ -30,7 +31,7 @@ MulterModule.register({
 export class AssociationController {
   constructor(private readonly associationService: AssociationService) {}
 
-
+  @Public()
   @Post('association/inscription')
   async register(
     @Body() createAssociationDto: CreateAssociationDto,
@@ -45,11 +46,13 @@ export class AssociationController {
       createAssociationDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.associationService.findAll();
   }
 
+  @Public()
   @Post()
   async search(
     @Body() body: SearchBodyDto,
@@ -59,6 +62,7 @@ export class AssociationController {
     return this.associationService.search(body)
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.associationService.findOne(id);

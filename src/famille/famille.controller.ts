@@ -10,6 +10,7 @@ import {
 import { FamilleService } from './famille.service';
 import { CreateFamilleDto } from './dto/create-famille.dto';
 import { UpdateFamilleDto } from './dto/update-famille.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('famille')
 export class FamilleController {
@@ -17,6 +18,7 @@ export class FamilleController {
     private readonly familleService: FamilleService,
   ) {}
 
+  @Public()
   @Post('/inscription')
   async register(
     @Body() createFamilleDto: CreateFamilleDto,

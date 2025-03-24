@@ -10,19 +10,17 @@ import {
 import { UtilisateurService } from './utilisateur.service';
 import { CreateUtilisateurDto } from './dto/create-utilisateur.dto';
 import { UpdateUtilisateurDto } from './dto/update-utilisateur.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('utilisateur')
 export class UtilisateurController {
   constructor(private readonly utilisateurService: UtilisateurService) {}
 
-  //! Link with role
+  @Public()
   @Post()
   create(@Body() createUtilisateurDto: CreateUtilisateurDto) {
     return this.utilisateurService.create(createUtilisateurDto);
   }
-
-  @Post('/connexion')
-  //! Add login
 
   @Get()
   findAll() {

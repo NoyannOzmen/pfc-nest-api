@@ -20,6 +20,7 @@ import { UpdateAnimalDto } from './dto/update-animal.dto';
 import { SearchBodyDto } from './dto/payload-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SharpPipe } from 'src/pipes/sharp.pipe';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('animaux')
 export class AnimalController {
@@ -32,11 +33,13 @@ export class AnimalController {
     return this.animalService.create(createAnimalDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.animalService.findAll();
   }
 
+  @Public()
   @Post()
   async search(
     @Body() body: SearchBodyDto,
@@ -46,6 +49,7 @@ export class AnimalController {
     return this.animalService.search(body)
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.animalService.findOne(id);
