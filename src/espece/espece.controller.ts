@@ -11,7 +11,7 @@ import { EspeceService } from './espece.service';
 import { CreateEspeceDto } from './dto/create-espece.dto';
 import { UpdateEspeceDto } from './dto/update-espece.dto';
 
-@Controller('espece')
+@Controller('especes')
 export class EspeceController {
   constructor(private readonly especeService: EspeceService) {}
 

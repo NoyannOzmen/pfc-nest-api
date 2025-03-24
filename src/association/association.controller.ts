@@ -26,12 +26,12 @@ MulterModule.register({
   dest: '../assets/upload'
 });
 
-@Controller('association')
+@Controller('associations')
 export class AssociationController {
   constructor(private readonly associationService: AssociationService) {}
 
 
-  @Post('/inscription')
+  @Post('association/inscription')
   async register(
     @Body() createAssociationDto: CreateAssociationDto,
     @Body('email') email: string,
@@ -64,7 +64,7 @@ export class AssociationController {
     return this.associationService.findOne(id);
   }
 
-  @Post('/profil')
+  @Post('association/profil')
   //! Add update infos logic
   @Patch(':id')
   update(
@@ -93,13 +93,13 @@ export class AssociationController {
     return this.associationService.uploadLogo(file);
   }
 
-  @Post('/profil/demandes/:id/accept')
+  @Post('association/profil/demandes/:id/accept')
   //! Add request logic
 
-  @Post('/profil/demandes/:id/deny')
+  @Post('association/profil/demandes/:id/deny')
   //! Add request logic
 
-  @Post('/profil/delete')
+  @Post('association/profil/delete')
   //! Add delete account logic
   @Delete(':id')
   remove(@Param('id') id: string) {
