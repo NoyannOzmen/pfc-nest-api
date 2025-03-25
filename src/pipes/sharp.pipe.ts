@@ -16,7 +16,7 @@ export class SharpPipe implements PipeTransform<Express.Multer.File, Promise<str
         height: 300,
       })
       .webp({ effort: 3 })
-      .toFile(path.join('./assets/uploads', filename));
+      .toFile(path.join('src/assets/uploads', filename));
 
     return filename;
   }

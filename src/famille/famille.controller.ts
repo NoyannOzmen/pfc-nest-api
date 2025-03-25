@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { FamilleService } from './famille.service';
 import { CreateFamilleDto } from './dto/create-famille.dto';
@@ -45,12 +46,15 @@ export class FamilleController {
 
   @Post('/profil')
   update(
+    @Request() req,
     @Body() updateFamilleDto: UpdateFamilleDto) {
-      return this.familleService.update(updateFamilleDto);
+      return this.familleService.update(updateFamilleDto, req);
   }
 
   @Post('/profil/delete')
-  remove() {
-    return this.familleService.deleteFosterAccount();
+  remove(
+    @Request() req
+  ) {
+    return this.familleService.deleteFosterAccount(req);
   }
 }

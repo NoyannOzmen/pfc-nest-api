@@ -11,34 +11,42 @@ import {
   UseInterceptors,
   UploadedFile,
   ParseFilePipeBuilder,
-  HttpStatus
+  HttpStatus,
+  Request
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AnimalService } from './animal.service';
 import { CreateAnimalDto } from './dto/create-animal.dto';
 import { UpdateAnimalDto } from './dto/update-animal.dto';
 import { SearchBodyDto } from './dto/payload-dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { SharpPipe } from 'src/pipes/sharp.pipe';
 import { Public } from 'src/auth/decorators/public.decorator';
 
-@Controller('animaux')
+MulterModule.register({
+  dest: 'src/assets/uploads'
+});
+
+@Controller()
 export class AnimalController {
   constructor(private readonly animalService: AnimalService) {}
   
-  @Post('/nouveau-profil')
-  create(@Body() createAnimalDto: CreateAnimalDto) {
-    return this.animalService.create(createAnimalDto);
+  @Post('/animaux/nouveau-profil')
+  create(
+    @Request() req,
+    @Body() createAnimalDto: CreateAnimalDto
+  ) {
+    return this.animalService.create(createAnimalDto, req);
   }
 
   @Public()
-  @Get()
+  @Get('/animaux/')
   findAll() {
     return this.animalService.findAll();
   }
 
   @Public()
-  @Post()
+  @Post('/animaux/')
   async search(
     @Body() body: SearchBodyDto,
     @Req() req: Request,
@@ -48,43 +56,48 @@ export class AnimalController {
   }
 
   @Public()
-  @Get(':id')
+  @Get('/animaux/:id')
   findOne(@Param('id') id: string) {
     return this.animalService.findOne(id);
   }
 
-  @Post(':id/faire-une-demande')
-  hostRequest(@Param('id') id:string) {
-    return this.animalService.hostRequest(id)
+  @Post('/animaux/:id/faire-une-demande')
+  hostRequest(
+    @Request() req,
+    @Param('id') id:string
+  ) {
+    return this.animalService.hostRequest(id, req)
   }
 
-  @Post('upload/photo')
+  @Post('/upload/photo')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
+    @Request() req,
     @UploadedFile(
-      SharpPipe,
+
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: 'image/(jpeg|jpg|gif|png|webp)', 
+          fileType: 'jpeg|jpg|png|gif|webp',
         })
         .addMaxSizeValidator({
-          maxSize: 5000
+          maxSize: 5000000
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
-        })
+        }),
+      SharpPipe,
     ) file: Express.Multer.File) {
-    return this.animalService.uploadPhoto(file);
+    return this.animalService.uploadPhoto(file, req);
   }
 
-  @Patch(':id')
+  @Patch('/animaux/:id')
   update(
     @Param('id') id: string,
     @Body() updateAnimalDto: UpdateAnimalDto) {
       return this.animalService.update(id, updateAnimalDto);
     }
 
-  @Delete(':id')
+  @Delete('/animaux/:id')
   remove(@Param('id') id: string) {
     return this.animalService.remove(id);
   }

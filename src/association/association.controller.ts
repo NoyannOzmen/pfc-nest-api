@@ -12,10 +12,11 @@ import {
   UploadedFile,
   UseInterceptors,
   HttpStatus,
+  Request,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterModule } from '@nestjs/platform-express';
-import { Express, Request, Response } from 'express';
+import { Express, Response } from 'express';
 import { AssociationService } from './association.service';
 import { CreateAssociationDto } from './dto/create-association.dto';
 import { UpdateAssociationDto } from './dto/update-association.dto';
@@ -26,10 +27,10 @@ import { AnimalService } from 'src/animal/animal.service';
 import { DemandeService } from 'src/demande/demande.service';
 
 MulterModule.register({
-  dest: '../assets/upload'
+  dest: 'src/assets/uploads'
 });
 
-@Controller('associations')
+@Controller()
 export class AssociationController {
   constructor(
     private readonly associationService: AssociationService,
@@ -53,13 +54,13 @@ export class AssociationController {
   }
 
   @Public()
-  @Get()
+  @Get('associations')
   findAll() {
     return this.associationService.findAll();
   }
 
   @Public()
-  @Post()
+  @Post('associations')
   async search(
     @Body() body: SearchBodyDto,
     @Req() req: Request,
@@ -69,23 +70,24 @@ export class AssociationController {
   }
 
   @Public()
-  @Get(':id')
+  @Get('associations/:id')
   findOne(@Param('id') id: string) {
     return this.associationService.findOne(id);
   }
 
-  @Post('association/profil')
+  @Post('associations/profil')
   update(
+    @Request() req,
     @Body() updateAssociationDto: UpdateAssociationDto) {
-    return this.associationService.update(updateAssociationDto);
+    return this.associationService.update(updateAssociationDto, req);
   }
 
-  @Get('association/profil/animaux/:id')
+  @Get('associations/profil/animaux/:id')
   residentDetails(@Param('id') id: string) {
     return this.animalService.findOne(id)
   }
 
-  @Get('association/profil/demandes/:id')
+  @Get('associations/profil/demandes/:id')
   requestDetails(@Param('id') id: string) {
     return this.demandeService.findOne(id)
   }
@@ -93,34 +95,37 @@ export class AssociationController {
   @Post('/upload/logo')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
+    @Request() req,
     @UploadedFile(
-      SharpPipe,
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: 'image/(jpeg|jpg|gif|png|webp)', 
+          fileType: 'jpeg|jpg|png|gif|webp',
         })
         .addMaxSizeValidator({
-          maxSize: 5000
+          maxSize: 5000000
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
-        })
+        }),
+      SharpPipe,
     ) file: Express.Multer.File) {
-    return this.associationService.uploadLogo(file);
+    return this.associationService.uploadLogo(file, req);
   }
 
-  @Post('/associations/profil/demandes/:id/accept')
+  @Post('associations/profil/demandes/:id/accept')
   accept(@Param('id') id: string) {
     return this.associationService.acceptRequest(id)
   }
 
-  @Post('/associations/profil/demandes/:id/deny')
+  @Post('associations/profil/demandes/:id/deny')
   deny(@Param('id') id: string) {
     return this.associationService.denyRequest(id)
   }
 
   @Post('association/profil/delete')
-  remove() {
-    return this.associationService.deleteShelterAccount();
+  remove(
+    @Request() req,
+  ) {
+    return this.associationService.deleteShelterAccount(req);
   }
 }

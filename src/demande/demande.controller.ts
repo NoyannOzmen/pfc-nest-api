@@ -26,7 +26,8 @@ export class DemandeController {
     return this.demandeService.findAll();
   }
 
-  @Get(':id')
+  @Public()
+  @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.demandeService.findOne(id);
   }

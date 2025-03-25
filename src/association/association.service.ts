@@ -13,6 +13,7 @@ import { UtilisateurService } from '../utilisateur/utilisateur.service';
 import { DemandeService } from 'src/demande/demande.service';
 import * as bcrypt from 'bcrypt';
 import { AnimalService } from 'src/animal/animal.service';
+import { log } from 'console';
 
 @Injectable()
 export class AssociationService {
@@ -53,7 +54,7 @@ export class AssociationService {
     });
     await newShelter.save();
     
-    return 'Shelter successfully created';
+    return { message : 'Shelter account successfully created' };
   }
 
   async findAll(): Promise<Association[]> {
@@ -103,15 +104,13 @@ export class AssociationService {
     return shelter
   }
 
-  async update(updateAssociationDto: UpdateAssociationDto) : Promise<Association> {
-    const id = 1
-    //! REMOVE HARDCODED
+  async update(updateAssociationDto: UpdateAssociationDto, req) : Promise<Association> {
+    const id = req.user.shelter
     const shelter = await this.associationModel.findByPk(id);
-
-    if (!shelter) {
+     if (!shelter) {
       throw new NotFoundException({
         status: 'error',
-        message: `Shelter with id ${id} does not exist`,
+        message: `Shelter does not exist`,
       })
     }
     
@@ -119,13 +118,9 @@ export class AssociationService {
     return shelter
   }
 
-  async uploadLogo(file: Express.Multer.File) {
-    let userImage = file.path;
-
-    const trim = userImage.replace("./assets", "");
-    /* const assoId = request.body.assoId; */
-    //! REMOVE HARDCODED VALUE AFTER AUTH
-    const assoId = 1;
+  async uploadLogo(file: Express.Multer.File, req) {
+    const trim = '/images/animaux/' + file;
+    const assoId = req.user.shelter;
     
     const association = await this.associationModel.findByPk(assoId, {
         include : 'images_association'
@@ -183,12 +178,11 @@ export class AssociationService {
     });
     
     await updatedRequest.save();
-    return 'Denied request'
+    return { message : 'Denied request'}
   }
 
-  async deleteShelterAccount() {
-    const id = 1
-    //! REMOVE HARDCODED
+  async deleteShelterAccount(req) {
+    const id = req.user.shelter
     const shelter = await this.findOne(id.toString());
 
     if (shelter.pensionnaires.length) {

@@ -4,6 +4,8 @@ import { UpdateDemandeDto } from './dto/update-demande.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Demande } from './demande.model';
 import { Op } from 'sequelize';
+import { Famille } from 'src/famille/famille.model';
+import { Animal } from 'src/animal/animal.model';
 
 @Injectable()
 export class DemandeService {
@@ -23,7 +25,15 @@ export class DemandeService {
   }
 
   async findOne(id: string): Promise<Demande> {
-    const request = await this.demandeModel.findByPk(id);
+    const request = await this.demandeModel.findByPk(id,
+      {
+        include: [
+          { model: Famille, as: "famille"},
+          { model: Animal, as: "animal", include: ['tags', 'espece', 'images_animal']},
+        ]
+      }
+    );
+    console.log(request)
 
     if (!request) {
       throw new NotFoundException({

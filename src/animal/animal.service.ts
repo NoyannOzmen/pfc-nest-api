@@ -14,7 +14,6 @@ import { DemandeService } from 'src/demande/demande.service';
 import { TagService } from 'src/tag/tag.service';
 import { MediaService } from 'src/media/media.service';
 import { AnimalTagService } from 'src/animal_tag/animal_tag.service';
-import { Demande } from 'src/demande/demande.model';
 
 @Injectable()
 export class AnimalService {
@@ -27,9 +26,9 @@ export class AnimalService {
     private animalTagService: AnimalTagService
   ) {}
 
-  async create(createAnimalDto: CreateAnimalDto) {
-    const shelterId = 1
-    //! REMOVE HARDCODED
+  async create(createAnimalDto: CreateAnimalDto, req) {
+    console.log(createAnimalDto)
+    const shelterId = req.user.shelter
     const tagCount = await this.tagService.count();
     const tagIdArray = [] as Array<number>;
 
@@ -39,10 +38,19 @@ export class AnimalService {
           tagIdArray.push(parseInt(createAnimalDto[`tag_${i+1}`]));
       }
     }
-    createAnimalDto.association_id = shelterId;
-    createAnimalDto.statut = 'En refuge'
     
-    const newAnimal = await this.animalModel.create({ ...createAnimalDto });
+    const newAnimal = await this.animalModel.create({
+      nom: createAnimalDto.nom_animal,
+      race: createAnimalDto.race_animal,
+      espece_id: createAnimalDto.espece_animal,
+      sexe: createAnimalDto.sexe_animal,
+      couleur: createAnimalDto.couleur_animal,
+      age: createAnimalDto.age_animal,
+      description: createAnimalDto.description_animal,
+      tags: createAnimalDto.tags,
+      association_id: shelterId,
+      statut: 'En refuge'
+    });
     const newMedia = await this.mediaService.create({
       association_id : null,
       animal_id : newAnimal.id,
@@ -56,7 +64,7 @@ export class AnimalService {
       }
   }
 
-    return 'Animal successfully created';
+    return { message : 'Animal successfully created' };
   }
 
   async findAll(): Promise<Animal[]> {
@@ -121,10 +129,9 @@ export class AnimalService {
     return animal
   }
 
-  async hostRequest(id: string) {
+  async hostRequest(id: string, req) {
     const animalId = Number(id);
-    const familleId = 1;
-    //! REMOVE HARDCODED VALUE
+    const familleId = req.user.foster
 
     const animal = await this.animalModel.findByPk(id)
 
@@ -151,12 +158,10 @@ export class AnimalService {
     }
   }
 
-  async uploadPhoto(file: Express.Multer.File){
-    let userImage = file.path;
-    const trim = userImage.replace("./assets", "");
-    /* const animalId = req.body.animalId */;
-    //! REMOVE HARDCODED VALUE AFTER AUTH
-    const animalId = 1;
+  async uploadPhoto(file: Express.Multer.File, req){
+    const trim = '/images/animaux/' + file;
+    const animalId = req.body.animalId;
+    console.log(animalId)
 
     const animal = await this.animalModel.findByPk(animalId, {
         include : 'images_animal'

@@ -17,7 +17,7 @@ export class AuthService {
 
     if (user && await bcrypt.compare(mot_de_passe, user.mot_de_passe)) {
       user.mot_de_passe = '';
-      const payload = { sub: user.id, email: user.email };
+      const payload = { sub: user.id, email: user.email, shelter: user.refuge?.id, foster: user.accueillant?.id  };
 
       return {
         user,

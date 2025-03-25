@@ -68,9 +68,8 @@ export class FamilleService {
     return foster
   }
 
-  async update(updateFamilleDto: UpdateFamilleDto) : Promise<Famille> {
-    const id = 1
-    //! REMOVE HARDCODED
+  async update(updateFamilleDto: UpdateFamilleDto, req) : Promise<Famille> {
+    const id = req.user.foster
     const foster = await this.familleModel.findByPk(id);
 
     if (!foster) {
@@ -83,9 +82,8 @@ export class FamilleService {
     return foster;
   }
 
-  async deleteFosterAccount() {
-    const id = 11;
-    //! REMOVE HARDCODED
+  async deleteFosterAccount(req) {
+    const id = req.user.foster
     const foster = await this.findOne(id.toString());
 
     if (foster.animaux.length) {
