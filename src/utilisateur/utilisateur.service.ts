@@ -12,9 +12,18 @@ export class UtilisateurService {
   ) {}
 
 
+  async findByEmail(email: string): Promise<Utilisateur | null> {
+    return this.utilisateurModel.findOne({
+      where: { email },
+      include : ["refuge", "accueillant"]
+    });
+  }
+
   async create(createUtilisateurDto: CreateUtilisateurDto) {
-    const user = await this.utilisateurModel.create({ ...createUtilisateurDto });
-    return 'User successfully created';
+    const newUser = await this.utilisateurModel.create({ ...createUtilisateurDto });
+    await newUser.save();
+
+    return { message: 'User successfully created', newUser : newUser};
   }
 
   async findAll(): Promise<Utilisateur[]> {
@@ -51,6 +60,6 @@ export class UtilisateurService {
   async remove(id: string) {
     const user = await this.findOne(id);
     await user.destroy();
-    return `Succesfully removed #${id} User`;
+    return { message : `User succesfully removed` }
   }
 }

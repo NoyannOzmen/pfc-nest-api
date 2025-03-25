@@ -3,6 +3,9 @@ import { CreateDemandeDto } from './dto/create-demande.dto';
 import { UpdateDemandeDto } from './dto/update-demande.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Demande } from './demande.model';
+import { Op } from 'sequelize';
+import { Famille } from 'src/famille/famille.model';
+import { Animal } from 'src/animal/animal.model';
 
 @Injectable()
 export class DemandeService {
@@ -22,7 +25,15 @@ export class DemandeService {
   }
 
   async findOne(id: string): Promise<Demande> {
-    const request = await this.demandeModel.findByPk(id);
+    const request = await this.demandeModel.findByPk(id,
+      {
+        include: [
+          { model: Famille, as: "famille"},
+          { model: Animal, as: "animal", include: ['tags', 'espece', 'images_animal']},
+        ]
+      }
+    );
+    console.log(request)
 
     if (!request) {
       throw new NotFoundException({
@@ -30,9 +41,29 @@ export class DemandeService {
         message: `Request with id ${id} does not exist`,
       });
     }
-
     return request
   }
+
+    async findByExisting(familleId: number, animalId : number): Promise<Demande | null> {
+      return this.demandeModel.findOne({
+        where :{ 
+          [Op.and] : [
+            {famille_id: familleId},
+            {animal_id: animalId}
+          ]}
+        })
+    }
+
+    async findOthers(animalId : number, id : number) : Promise<Demande[] | null> {
+      return this.demandeModel.findAll({
+        where :{
+          animal_id: animalId,
+          [Op.not]: {
+              id : id
+          }
+      }
+      })
+    }
 
   async update(id: string, updateDemandeDto: UpdateDemandeDto) : Promise<Demande> {
     const request = await this.demandeModel.findByPk(id);

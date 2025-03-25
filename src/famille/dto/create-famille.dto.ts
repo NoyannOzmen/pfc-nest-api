@@ -8,4 +8,5 @@ export class CreateFamilleDto {
   readonly pays: string;
   readonly hebergement: string;
   readonly terrain: string;
+  utilisateur_id : number
 }

@@ -10,8 +10,9 @@ import {
 import { EspeceService } from './espece.service';
 import { CreateEspeceDto } from './dto/create-espece.dto';
 import { UpdateEspeceDto } from './dto/update-espece.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
-@Controller('espece')
+@Controller('especes')
 export class EspeceController {
   constructor(private readonly especeService: EspeceService) {}
 
@@ -20,6 +21,7 @@ export class EspeceController {
     return this.especeService.create(createEspeceDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.especeService.findAll();

@@ -10,8 +10,9 @@ import {
 import { DemandeService } from './demande.service';
 import { CreateDemandeDto } from './dto/create-demande.dto';
 import { UpdateDemandeDto } from './dto/update-demande.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
-@Controller('demande')
+@Controller('demandes')
 export class DemandeController {
   constructor(private readonly demandeService: DemandeService) {}
 
@@ -25,7 +26,8 @@ export class DemandeController {
     return this.demandeService.findAll();
   }
 
-  @Get(':id')
+  @Public()
+  @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.demandeService.findOne(id);
   }

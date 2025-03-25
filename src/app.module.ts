@@ -17,8 +17,11 @@ import { Demande } from './demande/demande.model';
 import { Espece } from './espece/espece.model';
 import { Famille } from './famille/famille.model';
 import { Media } from './media/media.model';
-import { Animal_Tag, Tag } from './tag/tag.model';
+import { Tag } from './tag/tag.model';
 import { Utilisateur } from './utilisateur/utilisateur.model';
+import { AuthModule } from './auth/auth.module';
+import { AnimalTagModule } from './animal_tag/animal_tag.module';
+import { Animal_Tag } from './animal_tag/animal_tag.model';
 
 @Module({
   imports: [
@@ -47,6 +50,8 @@ import { Utilisateur } from './utilisateur/utilisateur.model';
     MediaModule,
     TagModule,
     UtilisateurModule,
+    AuthModule,
+    AnimalTagModule,
   ],
   controllers: [AppController],
   providers: [AppService],

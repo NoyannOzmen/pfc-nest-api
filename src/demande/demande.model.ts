@@ -1,9 +1,16 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, PrimaryKey, AllowNull, AutoIncrement, Default } from 'sequelize-typescript';
 import { Animal } from 'src/animal/animal.model';
 import { Famille } from 'src/famille/famille.model';
 
 @Table
 export class Demande extends Model {
+  @PrimaryKey
+  @Column({
+    type: DataType.INTEGER,
+    autoIncrement: true,
+  })
+  declare id: any;
+
   @Column({
     type: DataType.ENUM,
     values: ['En attente', 'Validée', 'Refusée'],

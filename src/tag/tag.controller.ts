@@ -10,16 +10,18 @@ import {
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
-@Controller('tag')
+@Controller('tags')
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 
-  @Post()
+  @Post('/create')
   create(@Body() createTagDto: CreateTagDto) {
     return this.tagService.create(createTagDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.tagService.findAll();

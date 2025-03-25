@@ -79,5 +79,5 @@ export class Famille extends Model {
   declare identifiant_famille: Utilisateur;
 
   @BelongsToMany(() => Animal, () => Demande)
-  declare demandes: Animal[];
+  declare animaux_accueillable: Animal[];
 }

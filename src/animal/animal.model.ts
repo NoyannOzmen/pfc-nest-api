@@ -8,12 +8,13 @@ import {
   HasMany,
   BelongsToMany,
 } from 'sequelize-typescript';
+import { Animal_Tag } from 'src/animal_tag/animal_tag.model';
 import { Association } from 'src/association/association.model';
 import { Demande } from 'src/demande/demande.model';
 import { Espece } from 'src/espece/espece.model';
 import { Famille } from 'src/famille/famille.model';
 import { Media } from 'src/media/media.model';
-import { Animal_Tag, Tag } from 'src/tag/tag.model';
+import { Tag } from 'src/tag/tag.model';
 
 @Table
 export class Animal extends Model {
@@ -89,5 +90,5 @@ export class Animal extends Model {
   declare tags: Tag[];
 
   @BelongsToMany(() => Famille, () => Demande)
-  declare potentiel_accueillant: Famille[];
+  declare demandes: Famille[];
 }
