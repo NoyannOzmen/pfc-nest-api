@@ -23,7 +23,7 @@ export class UtilisateurService {
     const newUser = await this.utilisateurModel.create({ ...createUtilisateurDto });
     await newUser.save();
 
-    return { message: 'User successfully created', newUser};
+    return { message: 'User successfully created', newUser : newUser};
   }
 
   async findAll(): Promise<Utilisateur[]> {
@@ -60,6 +60,6 @@ export class UtilisateurService {
   async remove(id: string) {
     const user = await this.findOne(id);
     await user.destroy();
-    return `Succesfully removed #${id} User`;
+    return { message : `User succesfully removed` }
   }
 }

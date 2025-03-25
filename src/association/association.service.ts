@@ -47,7 +47,10 @@ export class AssociationService {
       mot_de_passe : hashedPassword,
     })
 
-    const newShelter = await this.associationModel.create({ ...createAssociationDto });
+    const newShelter = await this.associationModel.create({
+      ...createAssociationDto,
+      utilisateur_id : newUser.newUser.id
+    });
     await newShelter.save();
     
     return 'Shelter successfully created';

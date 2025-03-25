@@ -15,7 +15,11 @@ export class FamilleService {
     private readonly utilisateurService: UtilisateurService
   ) {}
 
-  async registerFoster(email: string, mot_de_passe: string, confirmation: string, createFamilleDto: CreateFamilleDto) {
+  async registerFoster(
+    email: string,
+    mot_de_passe: string,
+    confirmation: string,
+    createFamilleDto: CreateFamilleDto) {
     if (mot_de_passe !== confirmation) {
       throw new BadRequestException('La confirmation du mot de passe ne correspond pas au mot de passe renseigné')
     }
@@ -33,10 +37,13 @@ export class FamilleService {
       mot_de_passe : hashedPassword,
     })
 
-    const newFoster = await this.familleModel.create({ ...createFamilleDto });
+    const newFoster = await this.familleModel.create({
+      ...createFamilleDto,
+      utilisateur_id : newUser.newUser.id
+    });
     await newFoster.save();
 
-    return 'Foster successfully created';
+    return { message : 'Foster account successfully created' };
   }
 
   async findAll(): Promise<Famille[]> {
@@ -77,7 +84,7 @@ export class FamilleService {
   }
 
   async deleteFosterAccount() {
-    const id = 1;
+    const id = 11;
     //! REMOVE HARDCODED
     const foster = await this.findOne(id.toString());
 
@@ -85,7 +92,7 @@ export class FamilleService {
       return { message : 'Vous accueillez actuellement un animal. Merci de contacter le refuge concerné avant de supprimer votre compte !'}
     }
 
-    const user = await this.utilisateurService.findOne(foster.identifiant_famille.id)
+    const user = await this.utilisateurService.findOne(foster.utilisateur_id.toString())
 
     await foster.destroy();
     await user.destroy();

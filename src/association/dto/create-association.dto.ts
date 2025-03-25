@@ -9,4 +9,5 @@ export class CreateAssociationDto {
   readonly telephone: string;
   readonly site: string;
   readonly description: string;
+  utilisateur_id: number
 }

@@ -42,7 +42,7 @@ export class AssociationController {
   async register(
     @Body() createAssociationDto: CreateAssociationDto,
     @Body('email') email: string,
-    @Body('password') mot_de_passe: string,
+    @Body('mot_de_passe') mot_de_passe: string,
     @Body('confirmation') confirmation: string,
   ) {
     return this.associationService.registerShelter(

@@ -23,7 +23,7 @@ export class FamilleController {
   async register(
     @Body() createFamilleDto: CreateFamilleDto,
     @Body('email') email: string,
-    @Body('password') mot_de_passe: string,
+    @Body('mot_de_passe') mot_de_passe: string,
     @Body('confirmation') confirmation: string,
   ) {
     return this.familleService.registerFoster(
@@ -43,7 +43,7 @@ export class FamilleController {
     return this.familleService.findOne(id);
   }
 
-  @Post('profil')
+  @Post('/profil')
   update(
     @Body() updateFamilleDto: UpdateFamilleDto) {
       return this.familleService.update(updateFamilleDto);
