@@ -33,7 +33,6 @@ export class DemandeService {
         ]
       }
     );
-    console.log(request)
 
     if (!request) {
       throw new NotFoundException({

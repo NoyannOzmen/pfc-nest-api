@@ -78,7 +78,7 @@ export class AssociationService {
           where : {
               nom : (searchBodyDto.shelterNom) ? (searchBodyDto.shelterNom) : { [Op.ne]: null },
               code_postal : (searchBodyDto.dptSelect) ? { [Op.startsWith] : searchBodyDto.dptSelect } : { [Op.ne] : null },
-              '$pensionnaires.espece.nom$' : (searchBodyDto.espece ) ? searchBodyDto.espece : { [Op.ne] : null },
+              '$pensionnaires.espece.nom$' : (searchBodyDto.espece.length) ? { [Op.in] : searchBodyDto.espece } : { [Op.ne] : null },
           }
       });
 
