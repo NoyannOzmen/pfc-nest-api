@@ -22,6 +22,8 @@ import { Utilisateur } from './utilisateur/utilisateur.model';
 import { AuthModule } from './auth/auth.module';
 import { AnimalTagModule } from './animal_tag/animal_tag.module';
 import { Animal_Tag } from './animal_tag/animal_tag.model';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -41,6 +43,9 @@ import { Animal_Tag } from './animal_tag/animal_tag.model';
       quoteIdentifiers: false,
       synchronize: true,
       models: [Animal, Association, Demande, Espece, Famille, Media, Tag, Animal_Tag, Utilisateur]
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '.', 'assets'),
     }),
     AnimalModule,
     AssociationModule,
