@@ -27,7 +27,6 @@ export class AnimalService {
   ) {}
 
   async create(createAnimalDto: CreateAnimalDto, req) {
-    console.log(createAnimalDto)
     const shelterId = req.user.shelter
     const tagCount = await this.tagService.count();
     const tagIdArray = [] as Array<number>;
@@ -161,7 +160,6 @@ export class AnimalService {
   async uploadPhoto(file: Express.Multer.File, req){
     const trim = '/images/animaux/' + file;
     const animalId = req.body.animalId;
-    console.log(animalId)
 
     const animal = await this.animalModel.findByPk(animalId, {
         include : 'images_animal'
