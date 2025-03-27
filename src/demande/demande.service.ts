@@ -20,7 +20,7 @@ export class DemandeService {
   }
 
   async findAll(): Promise<Demande[]> {
-    const requests = await this.demandeModel.findAll();
+    const requests = await this.demandeModel.findAll({attributes : ['id']});
     return requests
   }
 

@@ -21,6 +21,7 @@ export class DemandeController {
     return this.demandeService.create(createDemandeDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.demandeService.findAll();
