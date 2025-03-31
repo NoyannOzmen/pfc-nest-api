@@ -1,10 +1,21 @@
+import { IsAlpha, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
+
 export class SearchBodyDto {
+  @IsString()
+  @IsOptional()
+  @IsAlpha()
   especeDropdown: string;
-  readonly especeDropdownFull: string;
-  readonly especeDropdownSmall: string;
-  readonly dptSelect: number;
-  readonly sexe: string;
-  readonly minAge: number;
-  readonly maxAge: number;
-  readonly tag: string | Array<string>;
+  especeDropdownFull: string;
+  especeDropdownSmall: string;
+  sexe: string;
+
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  dptSelect: number;
+  minAge: number;
+  maxAge: number;
+
+  @IsOptional()
+  tag: string | Array<string>;
 }
