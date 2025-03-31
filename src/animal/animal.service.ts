@@ -27,7 +27,6 @@ export class AnimalService {
   ) {}
 
   async create(createAnimalDto: CreateAnimalDto, req) {
-    console.log(createAnimalDto)
     const shelterId = req.user.shelter
     const tagCount = await this.tagService.count();
     const tagIdArray = [] as Array<number>;
@@ -101,7 +100,7 @@ export class AnimalService {
             sexe : (searchBodyDto.sexe) ? (searchBodyDto.sexe) : { [Op.ne]: null },
             '$refuge.code_postal$' : (searchBodyDto.dptSelect) ? { [Op.startsWith] : searchBodyDto.dptSelect } : { [Op.ne] : null },
             age : (searchBodyDto.minAge && searchBodyDto.maxAge ) ? { [Op.between]:  [searchBodyDto.minAge, searchBodyDto.maxAge] } : { [Op.ne] : null },
-            '$tags.nom$' : (searchBodyDto.tag) ? { [Op.not] : searchBodyDto.tag } : { [Op.or] : [ { [Op.ne] : null }, { [Op.is] : null } ] },
+            '$tags.nom$' : (searchBodyDto.tag.length) ? { [Op.not] : searchBodyDto.tag } : { [Op.or] : [ { [Op.ne] : null }, { [Op.is] : null } ] },
         }
     });
   
@@ -161,7 +160,6 @@ export class AnimalService {
   async uploadPhoto(file: Express.Multer.File, req){
     const trim = '/images/animaux/' + file;
     const animalId = req.body.animalId;
-    console.log(animalId)
 
     const animal = await this.animalModel.findByPk(animalId, {
         include : 'images_animal'
