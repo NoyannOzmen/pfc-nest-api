@@ -1,13 +1,32 @@
+import { IsAlphanumeric, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl } from "class-validator";
+
 export class CreateAssociationDto {
-  readonly nom: string;
-  readonly responsable: string;
-  readonly rue: string;
-  readonly commune: string;
-  readonly code_postal: string;
-  readonly pays: string;
-  readonly siret: string;
-  readonly telephone: string;
-  readonly site: string;
-  readonly description: string;
+  @IsString()
+  @IsNotEmpty()
+  @IsAlphanumeric()
+  nom: string;
+  responsable: string;
+  rue: string;
+  commune: string;
+  code_postal: string;
+  pays: string;
+  siret: string;
+  telephone: string;
+
+  @IsString()
+  @IsOptional()
+  @IsAlphanumeric()
+  description: string;
+
+  @IsOptional()
+  @IsUrl(
+    { protocols: ['http', 'https'], require_protocol: true },
+    { message: 'URL non valide' },
+  )
+  site: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @IsPositive()
   utilisateur_id: number
 }
