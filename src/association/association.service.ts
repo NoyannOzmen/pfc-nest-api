@@ -59,7 +59,9 @@ export class AssociationService {
 
   async findAll(): Promise<Association[]> {
     const shelters = this.associationModel.findAll({
-      include : ["images_association"]
+      include : [
+        "images_association",
+      ]
     });
     return shelters
   }
@@ -89,7 +91,7 @@ export class AssociationService {
     const shelter = await this.associationModel.findByPk(id, {
       include : [
         "images_association",
-        { model : Utilisateur, attributes : ['email']},
+        /* { model : Utilisateur, attributes : ['email']}, */
         { model : Animal, as : "pensionnaires"}
       ]
     });
@@ -186,7 +188,7 @@ export class AssociationService {
     const shelter = await this.findOne(id.toString());
 
     if (shelter.pensionnaires.length) {
-      return { message : 'Vous accueillez actuellement un ou plusieurs animaux enregistrés sur notre site. Merci de contacter le refuge concerné avant de supprimer votre compte !'}
+      return { message : 'Vous accueillez actuellement un ou plusieurs animaux enregistrés sur notre site. Merci de contacter un administrateur afin de supprimer votre compte !'}
     }
 
     const user = await this.utilisateurService.findOne(shelter.identifiant_association.id)

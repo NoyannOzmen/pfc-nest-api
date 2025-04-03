@@ -34,6 +34,8 @@ export class FamilleController {
       createFamilleDto);
   }
 
+  //* Unused Endpoints
+  /*
   @Get()
   findAll() {
     return this.familleService.findAll();
@@ -43,7 +45,8 @@ export class FamilleController {
   findOne(@Param('id') id: string) {
     return this.familleService.findOne(id);
   }
-
+  */
+ 
   @Post('/profil')
   update(
     @Request() req,

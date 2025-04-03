@@ -7,6 +7,8 @@ import { UpdateAnimalTagDto } from './dto/update-animal_tag.dto';
 export class AnimalTagController {
   constructor(private readonly animalTagService: AnimalTagService) {}
 
+  //* Unused Endpoints
+  /*
   @Post()
   create(@Body() createAnimalTagDto: CreateAnimalTagDto) {
     return this.animalTagService.create(createAnimalTagDto);
@@ -31,4 +33,5 @@ export class AnimalTagController {
   remove(@Param('id') id: string) {
     return this.animalTagService.remove(+id);
   }
+  */
 }

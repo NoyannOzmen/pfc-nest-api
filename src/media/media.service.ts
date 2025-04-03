@@ -11,12 +11,13 @@ export class MediaService {
     private mediaModel: typeof Media,
   ) {}
 
-
   async create(createMediaDto: CreateMediaDto) {
     const media = await this.mediaModel.create({ ...createMediaDto });
     return 'Media successfully created';
   }
-
+  
+  //* Unused methods
+  /*
   async findAll(): Promise<Media[]> {
     const medias = await this.mediaModel.findAll();
     return medias
@@ -53,4 +54,5 @@ export class MediaService {
     await media.destroy();
     return `Succesfully removed #${id} Media`;
   }
+  */
 }

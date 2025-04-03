@@ -46,10 +46,13 @@ export class FamilleService {
     return { message : 'Foster account successfully created' };
   }
 
+  //* Unused method
+  /*
   async findAll(): Promise<Famille[]> {
     const fosters = await this.familleModel.findAll();
     return fosters
   }
+  */
 
   async findOne(id: string): Promise<Famille> {
     const foster = await this.familleModel.findByPk(id, { 

@@ -16,15 +16,17 @@ import { Public } from 'src/auth/decorators/public.decorator';
 export class EspeceController {
   constructor(private readonly especeService: EspeceService) {}
 
-  @Post()
-  create(@Body() createEspeceDto: CreateEspeceDto) {
-    return this.especeService.create(createEspeceDto);
-  }
-
   @Public()
   @Get()
   findAll() {
     return this.especeService.findAll();
+  }
+
+  //* Unused Endpoints
+  /*
+  @Post()
+  create(@Body() createEspeceDto: CreateEspeceDto) {
+    return this.especeService.create(createEspeceDto);
   }
 
   @Get(':id')
@@ -43,4 +45,5 @@ export class EspeceController {
   remove(@Param('id') id: string) {
     return this.especeService.remove(id);
   }
+  */
 }

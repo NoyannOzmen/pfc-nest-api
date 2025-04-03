@@ -16,11 +16,6 @@ import { Public } from 'src/auth/decorators/public.decorator';
 export class DemandeController {
   constructor(private readonly demandeService: DemandeService) {}
 
-  @Post()
-  create(@Body() createDemandeDto: CreateDemandeDto) {
-    return this.demandeService.create(createDemandeDto);
-  }
-
   @Public()
   @Get()
   findAll() {
@@ -31,6 +26,13 @@ export class DemandeController {
   @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.demandeService.findOne(id);
+  }
+
+  //* Unused Endpoints
+  /*
+  @Post()
+  create(@Body() createDemandeDto: CreateDemandeDto) {
+    return this.demandeService.create(createDemandeDto);
   }
 
   @Patch(':id')
@@ -44,4 +46,5 @@ export class DemandeController {
   remove(@Param('id') id: string) {
     return this.demandeService.remove(id);
   }
+  */
 }
