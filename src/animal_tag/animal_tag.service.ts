@@ -18,6 +18,8 @@ export class AnimalTagService {
     })
   }
 
+  //* Unused methods
+  /*
   create(createAnimalTagDto: CreateAnimalTagDto) {
     return 'This action adds a new animalTag';
   }
@@ -37,4 +39,5 @@ export class AnimalTagService {
   remove(id: number) {
     return `This action removes a #${id} animalTag`;
   }
+  */
 }

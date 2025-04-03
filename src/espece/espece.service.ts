@@ -11,14 +11,16 @@ export class EspeceService {
     private especeModel: typeof Espece,
   ) {}
 
-  async create(createEspeceDto: CreateEspeceDto) {
-    const espece = await this.especeModel.create({ ...createEspeceDto });
-    return 'Species successfully created';
-  }
-
   async findAll(): Promise<Espece[]> {
     const especes = await this.especeModel.findAll();
     return especes
+  }
+
+  //* Unused methods
+  /*
+  async create(createEspeceDto: CreateEspeceDto) {
+    const espece = await this.especeModel.create({ ...createEspeceDto });
+    return 'Species successfully created';
   }
 
   async findOne(id: string): Promise<Espece> {
@@ -52,4 +54,5 @@ export class EspeceService {
     await espece.destroy();
     return `Succesfully removed #${id} species`;
   }
+  */
 }

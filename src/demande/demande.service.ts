@@ -18,7 +18,7 @@ export class DemandeService {
     const request = await this.demandeModel.create({ ...createDemandeDto });
     return 'Request successfully created';
   }
-
+  
   async findAll(): Promise<Demande[]> {
     const requests = await this.demandeModel.findAll({attributes : ['id']});
     return requests
@@ -43,27 +43,29 @@ export class DemandeService {
     return request
   }
 
-    async findByExisting(familleId: number, animalId : number): Promise<Demande | null> {
-      return this.demandeModel.findOne({
-        where :{ 
-          [Op.and] : [
-            {famille_id: familleId},
-            {animal_id: animalId}
-          ]}
-        })
-    }
-
-    async findOthers(animalId : number, id : number) : Promise<Demande[] | null> {
-      return this.demandeModel.findAll({
-        where :{
-          animal_id: animalId,
-          [Op.not]: {
-              id : id
-          }
-      }
+  async findByExisting(familleId: number, animalId : number): Promise<Demande | null> {
+    return this.demandeModel.findOne({
+      where :{ 
+        [Op.and] : [
+          {famille_id: familleId},
+          {animal_id: animalId}
+        ]}
       })
-    }
+  }
 
+  async findOthers(animalId : number, id : number) : Promise<Demande[] | null> {
+    return this.demandeModel.findAll({
+      where :{
+        animal_id: animalId,
+        [Op.not]: {
+            id : id
+        }
+    }
+    })
+  }
+
+  //* Unused method
+  /*
   async update(id: string, updateDemandeDto: UpdateDemandeDto) : Promise<Demande> {
     const request = await this.demandeModel.findByPk(id);
 
@@ -82,4 +84,5 @@ export class DemandeService {
     await demande?.destroy();
     return `Succesfully removed #${id} request`;
   }
+  */
 }

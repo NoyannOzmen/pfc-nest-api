@@ -21,7 +21,9 @@ export class UtilisateurController {
   create(@Body() createUtilisateurDto: CreateUtilisateurDto) {
     return this.utilisateurService.create(createUtilisateurDto);
   }
-
+  
+  //* Unused Endpoints
+  /*
   @Get()
   findAll() {
     return this.utilisateurService.findAll();
@@ -38,6 +40,7 @@ export class UtilisateurController {
     @Body() updateUtilisateurDto: UpdateUtilisateurDto) {
       return this.utilisateurService.update(id, updateUtilisateurDto);
   }
+  */
 
   @Delete(':id')
   remove(@Param('id') id: string) {

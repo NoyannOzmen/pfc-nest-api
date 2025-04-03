@@ -15,6 +15,8 @@ import { UpdateMediaDto } from './dto/update-media.dto';
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
+  //* Unused Endpoints
+  /*
   @Post()
   create(@Body() createMediaDto: CreateMediaDto) {
     return this.mediaService.create(createMediaDto);
@@ -41,4 +43,5 @@ export class MediaController {
   remove(@Param('id') id: string) {
     return this.mediaService.remove(id);
   }
+  */
 }

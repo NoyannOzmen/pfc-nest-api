@@ -26,10 +26,13 @@ export class UtilisateurService {
     return { message: 'User successfully created', newUser : newUser};
   }
 
+  //* Unused method
+  /*
   async findAll(): Promise<Utilisateur[]> {
     const users = await this.utilisateurModel.findAll();
     return users
   }
+  */
 
   async findOne(id: string): Promise<Utilisateur> {
     const user = await this.utilisateurModel.findByPk(id);
@@ -44,6 +47,8 @@ export class UtilisateurService {
     return user
   }
 
+  //* Unused method
+  /*
   async update(id: string, updateUtilisateurDto: UpdateUtilisateurDto) : Promise<Utilisateur> {
     const user = await this.utilisateurModel.findByPk(id);
 
@@ -56,7 +61,8 @@ export class UtilisateurService {
     await user.update(updateUtilisateurDto);
     return user;
   }
-
+  */
+ 
   async remove(id: string) {
     const user = await this.findOne(id);
     await user.destroy();

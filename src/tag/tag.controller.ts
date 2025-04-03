@@ -27,6 +27,8 @@ export class TagController {
     return this.tagService.findAll();
   }
 
+  //* Unused Endpoints
+  /*
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tagService.findOne(id);
@@ -43,4 +45,5 @@ export class TagController {
   remove(@Param('id') id: string) {
     return this.tagService.remove(id);
   }
+  */
 }

@@ -97,8 +97,11 @@ export class AnimalController {
       return this.animalService.update(id, updateAnimalDto);
     }
 
+  //* Unused Endpoint
+  /*
   @Delete('/animaux/:id')
   remove(@Param('id') id: string) {
     return this.animalService.remove(id);
   }
+  */
 }

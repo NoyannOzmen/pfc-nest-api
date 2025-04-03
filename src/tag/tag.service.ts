@@ -21,6 +21,12 @@ export class TagService {
     return tags
   }
 
+  async count() {
+    return await this.tagModel.count();
+  }
+
+  //* Unused methods
+  /*
   async findOne(id: string): Promise<Tag> {
     const tag = await this.tagModel.findByPk(id);
 
@@ -32,10 +38,6 @@ export class TagService {
     }
 
     return tag
-  }
-
-  async count() {
-    return await this.tagModel.count();
   }
 
   async update(id: string, updateTagDto: UpdateTagDto) : Promise<Tag> {
@@ -56,4 +58,5 @@ export class TagService {
     await tag.destroy();
     return `Succesfully removed #${id} Tag`;
   }
+  */
 }

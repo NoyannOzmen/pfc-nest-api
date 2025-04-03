@@ -72,8 +72,8 @@ export class AnimalService {
         "espece",
         "images_animal",
         "demandes",
-        { model : Association, as : "refuge", include: ["images_association", { model: Utilisateur, attributes: ['email']}]},
-        { model : Famille, as : "accueillant", include: [{ model: Utilisateur, attributes: ['email']}]},
+        { model : Association, as : "refuge", include: ["images_association"/* , { model: Utilisateur, attributes: ['email']} */]},
+        { model : Famille, as : "accueillant"/* , include: [{ model: Utilisateur, attributes: ['email']}] */},
         { model : Tag, as : "tags" },
       ]
     });
@@ -112,8 +112,8 @@ export class AnimalService {
       include: [
         "espece",
         "images_animal",
-        { model : Association, as : "refuge", include: ["images_association", { model: Utilisateur, attributes: ['email']}]},
-        { model : Famille, as : "accueillant", include: [{ model: Utilisateur, attributes: ['email']}]},
+        { model : Association, as : "refuge", include: ["images_association"/* , { model: Utilisateur, attributes: ['email']} */]},
+        { model : Famille, as : "accueillant"/* , include: [{ model: Utilisateur, attributes: ['email']}] */},
         { model : Tag, as : "tags" },
       ]
     });
@@ -195,9 +195,12 @@ export class AnimalService {
     return animal;
   }
 
+  //* Unused method
+  /*
   async remove(id: string) {
     const animal = await this.findOne(id);
     await animal.destroy();
     return `Succesfully removed #${id} animal`;
   }
+  */
 }
