@@ -7,10 +7,11 @@ import { DemandeModule } from 'src/demande/demande.module';
 import { TagModule } from 'src/tag/tag.module';
 import { MediaModule } from 'src/media/media.module';
 import { AnimalTagModule } from 'src/animal_tag/animal_tag.module';
+import { Demande } from 'src/demande/demande.model';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Animal]),
+    SequelizeModule.forFeature([Animal, Demande]),
     DemandeModule,
     TagModule,
     MediaModule,

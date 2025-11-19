@@ -34,6 +34,11 @@ export class FamilleController {
       createFamilleDto);
   }
 
+  @Get('/profil/:id')
+  async findOne(@Param('id') id: string) {
+    return this.familleService.findOne(id);
+  }
+
   //* Unused Endpoints
   /*
   @Get()
@@ -44,6 +49,13 @@ export class FamilleController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.familleService.findOne(id);
+  }
+
+  @Get('/profil/demandes/:id')
+  getCurrentRequests(
+    @Param('id') id : string
+  ) { 
+    return this.familleService.getCurrentRequests(id)
   }
   */
  

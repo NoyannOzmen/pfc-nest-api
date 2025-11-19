@@ -61,6 +61,11 @@ export class AnimalController {
     return this.animalService.findOne(id);
   }
 
+  @Get('animaux/:id/requests')
+  findRequests(@Param('id') id: string) {
+    return this.animalService.findAnimalRequests(id);
+  }
+
   @Post('/animaux/:id/faire-une-demande')
   hostRequest(
     @Request() req,
@@ -96,6 +101,16 @@ export class AnimalController {
     @Body() updateAnimalDto: UpdateAnimalDto) {
       return this.animalService.update(id, updateAnimalDto);
     }
+
+  @Get('associations/:id/requested')
+  findRequested(@Param('id') id: string) {
+    return this.animalService.findRequested(id);
+  }
+
+  @Get('associations/:id/fostered')
+  findFostered(@Param('id') id: string) {
+    return this.animalService.findFostered(id);
+  }
 
   //* Unused Endpoint
   /*

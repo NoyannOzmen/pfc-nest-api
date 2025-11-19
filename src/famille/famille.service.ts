@@ -12,6 +12,8 @@ export class FamilleService {
   constructor(
     @InjectModel(Famille)
     private familleModel: typeof Famille,
+    @InjectModel(Animal)
+    private animalModel: typeof Animal,
     private readonly utilisateurService: UtilisateurService
   ) {}
 
@@ -70,6 +72,28 @@ export class FamilleService {
 
     return foster
   }
+
+  /* 
+  async getCurrentRequests(id: string) : Promise<Animal[]> {
+    const currentRequests = await this.animalModel.findAll({
+      include : [
+        "refuge",
+        "demandes"
+      ],
+      where : {
+        "$demandes.Demande.famille_id$" : id
+      }
+    });
+
+    if (!currentRequests) {
+      throw new NotFoundException({
+        status: 'error',
+        message : `Foster with id ${id} has not made a request yet`
+      });
+    }
+    return currentRequests;
+  } 
+  */
 
   async update(updateFamilleDto: UpdateFamilleDto, req) : Promise<Famille> {
     const id = req.user.foster

@@ -6,24 +6,25 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { DemandeService } from './demande.service';
 import { CreateDemandeDto } from './dto/create-demande.dto';
 import { UpdateDemandeDto } from './dto/update-demande.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 
-@Controller('demandes')
+@Controller()
 export class DemandeController {
   constructor(private readonly demandeService: DemandeService) {}
 
-  @Public()
-  @Get()
-  findAll() {
-    return this.demandeService.findAll();
+  @Get('/demandes')
+  findAll(
+    @Req() req: Request,
+  ) {
+    return this.demandeService.findAll(req);
   }
 
-  @Public()
-  @Get('/:id')
+  @Get('demandes/:id')
   findOne(@Param('id') id: string) {
     return this.demandeService.findOne(id);
   }

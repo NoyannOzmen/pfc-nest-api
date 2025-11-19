@@ -13,7 +13,6 @@ import { UtilisateurService } from '../utilisateur/utilisateur.service';
 import { DemandeService } from 'src/demande/demande.service';
 import * as bcrypt from 'bcrypt';
 import { AnimalService } from 'src/animal/animal.service';
-import { log } from 'console';
 
 @Injectable()
 export class AssociationService {
@@ -61,6 +60,7 @@ export class AssociationService {
     const shelters = this.associationModel.findAll({
       include : [
         "images_association",
+        { model : Animal, as : "pensionnaires", include : [{ model : Espece, as : "espece" }] },
       ]
     });
     return shelters
@@ -91,8 +91,7 @@ export class AssociationService {
     const shelter = await this.associationModel.findByPk(id, {
       include : [
         "images_association",
-        /* { model : Utilisateur, attributes : ['email']}, */
-        { model : Animal, as : "pensionnaires"}
+        { model : Animal, as : "pensionnaires", include: ["images_animal", "espece", { model : Association, as : "refuge"}]},
       ]
     });
 
@@ -101,6 +100,19 @@ export class AssociationService {
         status: 'error',
         message: `Shelter with id ${id} does not exist`,
       })
+    }
+
+    return shelter
+  }
+
+  async findDashboardInfos(id: string): Promise<Association> {
+    const shelter = await this.associationModel.findByPk(id);
+
+    if (!shelter) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Foster with id ${id} does not exist`,
+      });
     }
 
     return shelter
@@ -121,7 +133,7 @@ export class AssociationService {
   }
 
   async uploadLogo(file: Express.Multer.File, req) {
-    const trim = '/images/animaux/' + file;
+    const trim = '/uploads/' + file;
     const assoId = req.user.shelter;
     
     const association = await this.associationModel.findByPk(assoId, {
@@ -142,7 +154,8 @@ export class AssociationService {
     })
       
     await newMedia.save();
-    return { message : 'File uploaded successfully', association}
+    const url = newMedia.url;
+    return { message : 'File uploaded successfully', association, url}
   }
 
   async acceptRequest(id: string) {
@@ -191,7 +204,7 @@ export class AssociationService {
       return { message : 'Vous accueillez actuellement un ou plusieurs animaux enregistrés sur notre site. Merci de contacter un administrateur afin de supprimer votre compte !'}
     }
 
-    const user = await this.utilisateurService.findOne(shelter.identifiant_association.id)
+    const user = await this.utilisateurService.findOne(shelter.utilisateur_id.toString())
 
     await shelter.destroy();
     await user.destroy();

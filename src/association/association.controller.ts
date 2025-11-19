@@ -82,6 +82,11 @@ export class AssociationController {
     return this.associationService.update(updateAssociationDto, req);
   }
 
+  @Get('associations/profil/:id')
+  async DashboardInfos(@Param('id') id: string) {
+    return this.associationService.findDashboardInfos(id);
+  }
+
   @Get('associations/profil/animaux/:id')
   residentDetails(@Param('id') id: string) {
     return this.animalService.findOne(id)

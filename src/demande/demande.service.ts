@@ -19,8 +19,25 @@ export class DemandeService {
     return 'Request successfully created';
   }
   
-  async findAll(): Promise<Demande[]> {
-    const requests = await this.demandeModel.findAll({attributes : ['id']});
+  async findAll(req): Promise<Demande[]> {
+    const id = req.user.foster
+    const requests = await this.demandeModel.findAll({
+      include : [
+        "famille",
+        { model: Animal, as : "animal", include : ["refuge"]}
+      ],
+      where : {
+        "$famille.id$" : id
+      }
+    });
+
+    if (!requests) {
+      throw new NotFoundException({
+        status: 'error',
+        message : `Foster with id ${id} has not made a request yet`
+      });
+    }
+
     return requests
   }
 

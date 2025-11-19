@@ -14,12 +14,15 @@ import { DemandeService } from 'src/demande/demande.service';
 import { TagService } from 'src/tag/tag.service';
 import { MediaService } from 'src/media/media.service';
 import { AnimalTagService } from 'src/animal_tag/animal_tag.service';
+import { Demande } from 'src/demande/demande.model';
 
 @Injectable()
 export class AnimalService {
   constructor(
     @InjectModel(Animal)
     private animalModel: typeof Animal,
+    @InjectModel(Demande)
+    private demandeModel : typeof Demande,
     private demandeService : DemandeService,
     private tagService : TagService,
     private mediaService : MediaService,
@@ -27,17 +30,9 @@ export class AnimalService {
   ) {}
 
   async create(createAnimalDto: CreateAnimalDto, req) {
-    const shelterId = req.user.shelter
-    const tagCount = await this.tagService.count();
-    const tagIdArray = [] as Array<number>;
+    const shelterId = req.user.shelter;
+    const tags = req.body.tags;
 
-    for (let i = 0; i < tagCount; i++) {
-      const hasProperty = Object.hasOwn(createAnimalDto,`tag_${i+1}`);
-      if (hasProperty){
-          tagIdArray.push(parseInt(createAnimalDto[`tag_${i+1}`]));
-      }
-    }
-    
     const newAnimal = await this.animalModel.create({
       nom: createAnimalDto.nom_animal,
       race: createAnimalDto.race_animal,
@@ -50,6 +45,7 @@ export class AnimalService {
       association_id: shelterId,
       statut: 'En refuge'
     });
+
     const newMedia = await this.mediaService.create({
       association_id : null,
       animal_id : newAnimal.id,
@@ -57,12 +53,11 @@ export class AnimalService {
       ordre: 1
     })
 
-    if (tagIdArray) {
-      for (const tagId of tagIdArray) {
-          await this.animalTagService.addTag(newAnimal.id, tagId)
+    if (tags) {
+      for (const tag of tags) {
+        await this.animalTagService.addTag(newAnimal.id, tag)
       }
-  }
-
+    }
     return { message : 'Animal successfully created' };
   }
 
@@ -72,10 +67,13 @@ export class AnimalService {
         "espece",
         "images_animal",
         "demandes",
-        { model : Association, as : "refuge", include: ["images_association"/* , { model: Utilisateur, attributes: ['email']} */]},
-        { model : Famille, as : "accueillant"/* , include: [{ model: Utilisateur, attributes: ['email']}] */},
+        { model : Association, as : "refuge", include: ["images_association"]},
+        { model : Famille, as : "accueillant"},
         { model : Tag, as : "tags" },
-      ]
+      ],
+      /* where : {
+        statut:'En refuge',
+      } */
     });
     return animals
   }
@@ -112,8 +110,8 @@ export class AnimalService {
       include: [
         "espece",
         "images_animal",
-        { model : Association, as : "refuge", include: ["images_association"/* , { model: Utilisateur, attributes: ['email']} */]},
-        { model : Famille, as : "accueillant"/* , include: [{ model: Utilisateur, attributes: ['email']}] */},
+        { model : Association, as : "refuge", include: ["images_association"]},
+        { model : Famille, as : "accueillant"},
         { model : Tag, as : "tags" },
       ]
     });
@@ -128,10 +126,77 @@ export class AnimalService {
     return animal
   }
 
+  async findRequested(id: string): Promise<Animal[]> {
+    const requested = this.animalModel.findAll({
+      include : [
+        "images_animal",
+        "espece",
+        "demandes",
+        { model : Association, as : "refuge" },
+      ],
+      where : {
+        association_id : id,
+        "$demandes.Demande.id$" : {[Op.ne] : null }
+      }
+    });
+
+    if (!requested) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Shelter with id ${id} does not have animals requested for fostering`,
+      })
+    }
+
+    return requested
+  }
+
+  async findAnimalRequests(id : string): Promise<Demande[]> {
+    const animalRequests = await this.demandeModel.findAll({
+      include : [
+        "famille",
+        { model: Animal, as : "animal", include : ["refuge"]}
+      ],
+      where : {
+        "$animal.id$" : id
+      }
+    });
+
+    if (!animalRequests) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `No request for Animal with id ${id} yet.`
+      })
+    }
+
+    return animalRequests;
+  }
+
+  async findFostered(id: string): Promise<Animal[]> {
+    const fostered = this.animalModel.findAll({
+      include : [
+        "images_animal",
+        "espece",
+        "accueillant",
+        { model : Tag, as : "tags" }
+      ],
+      where : {
+        statut : 'Accueilli'
+      }
+    });
+
+    if (!fostered) {
+      throw new NotFoundException({
+        status: 'error',
+        message: `Shelter with id ${id} does not have animals currently fostered`,
+      })
+    }
+
+    return fostered
+  }
+
   async hostRequest(id: string, req) {
     const animalId = Number(id);
     const familleId = req.user.foster
-
     const animal = await this.animalModel.findByPk(id)
 
     if (!animal) {
@@ -158,7 +223,7 @@ export class AnimalService {
   }
 
   async uploadPhoto(file: Express.Multer.File, req){
-    const trim = '/images/animaux/' + file;
+    const trim = '/uploads/' + file;
     const animalId = req.body.animalId;
 
     const animal = await this.animalModel.findByPk(animalId, {
@@ -179,7 +244,8 @@ export class AnimalService {
     })
 
     await newMedia.save();
-    return { message : 'File uploaded successfully', animal}
+    const url = newMedia.url;
+    return { message : 'File uploaded successfully', animal, url}
   }
 
   async update(id: string, updateAnimalDto: UpdateAnimalDto) : Promise<Animal> {
