@@ -12,12 +12,10 @@ import { AnimalModule } from 'src/animal/animal.module';
     SequelizeModule.forFeature([Association]),
     DemandeModule,
     AnimalModule,
-    UtilisateurModule
+    UtilisateurModule,
   ],
   controllers: [AssociationController],
-  providers: [
-    AssociationService,
-  ],
-  exports: [AssociationService]
+  providers: [AssociationService],
+  exports: [AssociationService],
 })
 export class AssociationModule {}

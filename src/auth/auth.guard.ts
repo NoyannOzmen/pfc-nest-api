@@ -14,7 +14,7 @@ import { IS_PUBLIC_KEY } from './decorators/public.decorator';
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
-    private reflector: Reflector
+    private reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,19 +25,16 @@ export class AuthGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
-    
+
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException('Please provide token');
     }
     try {
-      const payload = await this.jwtService.verifyAsync(
-        token,
-        {
-          secret: jwtConstants.secret
-        }
-      );
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: jwtConstants.secret,
+      });
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException('Token cannot be verified');

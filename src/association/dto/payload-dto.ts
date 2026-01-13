@@ -1,4 +1,9 @@
-import { IsAlphanumeric, IsNumber, IsOptional, IsString, Min } from "class-validator";
+import {
+  IsAlphanumeric,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class SearchBodyDto {
   @IsNumber()

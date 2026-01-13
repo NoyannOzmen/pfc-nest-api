@@ -37,12 +37,22 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       database: process.env.DB_NAME,
       define: {
         timestamps: false,
-        freezeTableName: true
+        freezeTableName: true,
       },
       autoLoadModels: true,
       quoteIdentifiers: false,
       synchronize: true,
-      models: [Animal, Association, Demande, Espece, Famille, Media, Tag, Animal_Tag, Utilisateur]
+      models: [
+        Animal,
+        Association,
+        Demande,
+        Espece,
+        Famille,
+        Media,
+        Tag,
+        Animal_Tag,
+        Utilisateur,
+      ],
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '.', 'assets'),

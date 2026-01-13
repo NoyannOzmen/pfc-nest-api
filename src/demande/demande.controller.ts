@@ -1,26 +1,12 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Req,
-} from '@nestjs/common';
+import { Controller, Get, Param, Req } from '@nestjs/common';
 import { DemandeService } from './demande.service';
-import { CreateDemandeDto } from './dto/create-demande.dto';
-import { UpdateDemandeDto } from './dto/update-demande.dto';
-import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller()
 export class DemandeController {
   constructor(private readonly demandeService: DemandeService) {}
 
   @Get('/demandes')
-  findAll(
-    @Req() req: Request,
-  ) {
+  findAll(@Req() req: Request) {
     return this.demandeService.findAll(req);
   }
 

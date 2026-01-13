@@ -7,6 +7,6 @@ import { Espece } from './espece.model';
 @Module({
   imports: [SequelizeModule.forFeature([Espece])],
   controllers: [EspeceController],
-  providers: [EspeceService]
+  providers: [EspeceService],
 })
 export class EspeceModule {}

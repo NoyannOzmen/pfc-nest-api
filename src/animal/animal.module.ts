@@ -15,12 +15,10 @@ import { Demande } from 'src/demande/demande.model';
     DemandeModule,
     TagModule,
     MediaModule,
-    AnimalTagModule
+    AnimalTagModule,
   ],
   controllers: [AnimalController],
-  providers: [
-    AnimalService,
-  ],
-  exports: [ AnimalService]
+  providers: [AnimalService],
+  exports: [AnimalService],
 })
 export class AnimalModule {}

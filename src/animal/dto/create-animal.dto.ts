@@ -1,5 +1,13 @@
-import { IsAlpha, IsAlphanumeric, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
-import { CreateTagDto } from "src/tag/dto/create-tag.dto";
+import {
+  IsAlpha,
+  IsAlphanumeric,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
+import { CreateTagDto } from 'src/tag/dto/create-tag.dto';
 
 export class CreateAnimalDto {
   @IsString()
@@ -8,7 +16,7 @@ export class CreateAnimalDto {
   nom_animal: string;
   couleur_animal: string;
   sexe_animal: string;
-  espece_animal: string
+  espece_animal: string;
   statut: string;
 
   @IsString()
@@ -22,16 +30,16 @@ export class CreateAnimalDto {
   race_animal: string;
 
   @IsOptional()
-  tags : CreateTagDto | Array<CreateTagDto> | null;
+  tags: CreateTagDto | Array<CreateTagDto> | null;
 
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
-  association_id : number;
+  association_id: number;
   age_animal: number;
 
   @IsNumber()
   @IsPositive()
   @IsOptional()
-  famille_id : number
+  famille_id: number;
 }

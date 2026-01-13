@@ -1,4 +1,11 @@
-import { IsAlphanumeric, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
+import {
+  IsAlphanumeric,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class CreateFamilleDto {
   @IsString()
@@ -21,5 +28,5 @@ export class CreateFamilleDto {
   @IsNumber()
   @IsNotEmpty()
   @IsPositive()
-  utilisateur_id : number
+  utilisateur_id: number;
 }

@@ -1,6 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateMediaDto } from './dto/create-media.dto';
-import { UpdateMediaDto } from './dto/update-media.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Media } from './media.model';
 
@@ -12,10 +11,10 @@ export class MediaService {
   ) {}
 
   async create(createMediaDto: CreateMediaDto) {
-    const media = await this.mediaModel.create({ ...createMediaDto });
+    await this.mediaModel.create({ ...createMediaDto });
     return 'Media successfully created';
   }
-  
+
   //* Unused methods
   /*
   async findAll(): Promise<Media[]> {

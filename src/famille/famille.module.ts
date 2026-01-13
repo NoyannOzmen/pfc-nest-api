@@ -7,12 +7,9 @@ import { UtilisateurModule } from 'src/utilisateur/utilisateur.module';
 import { Animal } from 'src/animal/animal.model';
 
 @Module({
-  imports: [
-    SequelizeModule.forFeature([Famille, Animal]),
-    UtilisateurModule,
-  ],
+  imports: [SequelizeModule.forFeature([Famille, Animal]), UtilisateurModule],
   controllers: [FamilleController],
   providers: [FamilleService],
-  exports: [FamilleService]
+  exports: [FamilleService],
 })
 export class FamilleModule {}

@@ -8,6 +8,6 @@ import { Animal_Tag } from './animal_tag.model';
   imports: [SequelizeModule.forFeature([Animal_Tag])],
   controllers: [AnimalTagController],
   providers: [AnimalTagService],
-  exports: [AnimalTagService]
+  exports: [AnimalTagService],
 })
 export class AnimalTagModule {}

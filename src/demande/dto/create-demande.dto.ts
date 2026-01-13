@@ -1,4 +1,11 @@
-import { IsAlpha, IsDate, IsNotEmpty, IsNumber, IsPositive, IsString } from "class-validator";
+import {
+  IsAlpha,
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class CreateDemandeDto {
   @IsNumber()

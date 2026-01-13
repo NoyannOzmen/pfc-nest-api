@@ -1,4 +1,12 @@
-import { IsAlphanumeric, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl } from "class-validator";
+import {
+  IsAlphanumeric,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class CreateAssociationDto {
   @IsString()
@@ -28,5 +36,5 @@ export class CreateAssociationDto {
   @IsNumber()
   @IsNotEmpty()
   @IsPositive()
-  utilisateur_id: number
+  utilisateur_id: number;
 }

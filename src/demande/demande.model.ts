@@ -1,4 +1,12 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo, PrimaryKey, AllowNull, AutoIncrement, Default } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+  PrimaryKey,
+} from 'sequelize-typescript';
 import { Animal } from 'src/animal/animal.model';
 import { Famille } from 'src/famille/famille.model';
 
@@ -33,7 +41,7 @@ export class Demande extends Model {
   @ForeignKey(() => Animal)
   @Column
   declare animal_id: number;
-  
+
   @BelongsTo(() => Animal)
   declare animal: Animal;
 

@@ -1,6 +1,6 @@
-import { Column, ForeignKey, Model, Table } from "sequelize-typescript";
-import { Animal } from "src/animal/animal.model";
-import { Tag } from "src/tag/tag.model";
+import { Column, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { Animal } from 'src/animal/animal.model';
+import { Tag } from 'src/tag/tag.model';
 
 @Table
 export class Animal_Tag extends Model {

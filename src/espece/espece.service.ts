@@ -1,6 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateEspeceDto } from './dto/create-espece.dto';
-import { UpdateEspeceDto } from './dto/update-espece.dto';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Espece } from './espece.model';
 
@@ -13,7 +11,7 @@ export class EspeceService {
 
   async findAll(): Promise<Espece[]> {
     const especes = await this.especeModel.findAll();
-    return especes
+    return especes;
   }
 
   //* Unused methods

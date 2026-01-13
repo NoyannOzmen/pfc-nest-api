@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAnimalTagDto } from './dto/create-animal_tag.dto';
-import { UpdateAnimalTagDto } from './dto/update-animal_tag.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Animal_Tag } from './animal_tag.model';
 
@@ -8,14 +6,14 @@ import { Animal_Tag } from './animal_tag.model';
 export class AnimalTagService {
   constructor(
     @InjectModel(Animal_Tag)
-    private animalTagModel: typeof Animal_Tag
+    private animalTagModel: typeof Animal_Tag,
   ) {}
 
-  async addTag(id : number, tagId : number) {
+  async addTag(id: number, tagId: number) {
     await this.animalTagModel.create({
-      animal_id : id,
-      tag_id : tagId,
-    })
+      animal_id: id,
+      tag_id: tagId,
+    });
   }
 
   //* Unused methods

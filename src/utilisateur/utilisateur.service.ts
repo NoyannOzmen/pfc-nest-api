@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUtilisateurDto } from './dto/create-utilisateur.dto';
-import { UpdateUtilisateurDto } from './dto/update-utilisateur.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Utilisateur } from './utilisateur.model';
 
@@ -11,19 +10,20 @@ export class UtilisateurService {
     private utilisateurModel: typeof Utilisateur,
   ) {}
 
-
   async findByEmail(email: string): Promise<Utilisateur | null> {
     return this.utilisateurModel.findOne({
       where: { email },
-      include : ["refuge", "accueillant"]
+      include: ['refuge', 'accueillant'],
     });
   }
 
   async create(createUtilisateurDto: CreateUtilisateurDto) {
-    const newUser = await this.utilisateurModel.create({ ...createUtilisateurDto });
+    const newUser = await this.utilisateurModel.create({
+      ...createUtilisateurDto,
+    });
     await newUser.save();
 
-    return { message: 'User successfully created', newUser : newUser};
+    return { message: 'User successfully created', newUser: newUser };
   }
 
   //* Unused method
@@ -44,7 +44,7 @@ export class UtilisateurService {
       });
     }
 
-    return user
+    return user;
   }
 
   //* Unused method
@@ -62,10 +62,10 @@ export class UtilisateurService {
     return user;
   }
   */
- 
+
   async remove(id: string) {
     const user = await this.findOne(id);
     await user.destroy();
-    return { message : `User succesfully removed` }
+    return { message: `User succesfully removed` };
   }
 }

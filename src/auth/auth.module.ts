@@ -13,17 +13,17 @@ import { APP_GUARD } from '@nestjs/core';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: {expiresIn: 3600}
-    })
+      signOptions: { expiresIn: 3600 },
+    }),
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
     {
       provide: APP_GUARD,
-      useClass : AuthGuard
-    }
+      useClass: AuthGuard,
+    },
   ],
-  exports: [AuthService]
+  exports: [AuthService],
 })
 export class AuthModule {}

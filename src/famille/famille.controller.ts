@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Request,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Request } from '@nestjs/common';
 import { FamilleService } from './famille.service';
 import { CreateFamilleDto } from './dto/create-famille.dto';
 import { UpdateFamilleDto } from './dto/update-famille.dto';
@@ -15,9 +6,7 @@ import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('famille')
 export class FamilleController {
-  constructor(
-    private readonly familleService: FamilleService,
-  ) {}
+  constructor(private readonly familleService: FamilleService) {}
 
   @Public()
   @Post('inscription')
@@ -28,10 +17,11 @@ export class FamilleController {
     @Body('confirmation') confirmation: string,
   ) {
     return this.familleService.registerFoster(
-      email, 
-      mot_de_passe, 
-      confirmation, 
-      createFamilleDto);
+      email,
+      mot_de_passe,
+      confirmation,
+      createFamilleDto,
+    );
   }
 
   @Get('/profil/:id')
@@ -58,18 +48,14 @@ export class FamilleController {
     return this.familleService.getCurrentRequests(id)
   }
   */
- 
+
   @Post('/profil')
-  update(
-    @Request() req,
-    @Body() updateFamilleDto: UpdateFamilleDto) {
-      return this.familleService.update(updateFamilleDto, req);
+  update(@Request() req, @Body() updateFamilleDto: UpdateFamilleDto) {
+    return this.familleService.update(updateFamilleDto, req);
   }
 
   @Post('/profil/delete')
-  remove(
-    @Request() req
-  ) {
+  remove(@Request() req) {
     return this.familleService.deleteFosterAccount(req);
   }
 }

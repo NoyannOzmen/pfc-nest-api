@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDemandeDto } from './dto/create-demande.dto';
-import { UpdateDemandeDto } from './dto/update-demande.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Demande } from './demande.model';
 import { Op } from 'sequelize';
@@ -15,41 +14,43 @@ export class DemandeService {
   ) {}
 
   async create(createDemandeDto: CreateDemandeDto) {
-    const request = await this.demandeModel.create({ ...createDemandeDto });
+    await this.demandeModel.create({ ...createDemandeDto });
     return 'Request successfully created';
   }
-  
+
   async findAll(req): Promise<Demande[]> {
-    const id = req.user.foster
+    const id = req.user.foster;
     const requests = await this.demandeModel.findAll({
-      include : [
-        "famille",
-        { model: Animal, as : "animal", include : ["refuge"]}
+      include: [
+        'famille',
+        { model: Animal, as: 'animal', include: ['refuge'] },
       ],
-      where : {
-        "$famille.id$" : id
-      }
+      where: {
+        '$famille.id$': id,
+      },
     });
 
     if (!requests) {
       throw new NotFoundException({
         status: 'error',
-        message : `Foster with id ${id} has not made a request yet`
+        message: `Foster with id ${id} has not made a request yet`,
       });
     }
 
-    return requests
+    return requests;
   }
 
   async findOne(id: string): Promise<Demande> {
-    const request = await this.demandeModel.findByPk(id,
-      {
-        include: [
-          { model: Famille, as: "famille"},
-          { model: Animal, as: "animal", include: ['tags', 'espece', 'images_animal']},
-        ]
-      }
-    );
+    const request = await this.demandeModel.findByPk(id, {
+      include: [
+        { model: Famille, as: 'famille' },
+        {
+          model: Animal,
+          as: 'animal',
+          include: ['tags', 'espece', 'images_animal'],
+        },
+      ],
+    });
 
     if (!request) {
       throw new NotFoundException({
@@ -57,28 +58,29 @@ export class DemandeService {
         message: `Request with id ${id} does not exist`,
       });
     }
-    return request
+    return request;
   }
 
-  async findByExisting(familleId: number, animalId : number): Promise<Demande | null> {
+  async findByExisting(
+    familleId: number,
+    animalId: number,
+  ): Promise<Demande | null> {
     return this.demandeModel.findOne({
-      where :{ 
-        [Op.and] : [
-          {famille_id: familleId},
-          {animal_id: animalId}
-        ]}
-      })
+      where: {
+        [Op.and]: [{ famille_id: familleId }, { animal_id: animalId }],
+      },
+    });
   }
 
-  async findOthers(animalId : number, id : number) : Promise<Demande[] | null> {
+  async findOthers(animalId: number, id: number): Promise<Demande[] | null> {
     return this.demandeModel.findAll({
-      where :{
+      where: {
         animal_id: animalId,
         [Op.not]: {
-            id : id
-        }
-    }
-    })
+          id: id,
+        },
+      },
+    });
   }
 
   //* Unused method

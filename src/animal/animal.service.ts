@@ -6,7 +6,6 @@ import { Animal } from './animal.model';
 import { Association } from 'src/association/association.model';
 import { Famille } from 'src/famille/famille.model';
 import { Tag } from 'src/tag/tag.model';
-import { Utilisateur } from 'src/utilisateur/utilisateur.model';
 import { Op } from 'sequelize';
 import { SearchBodyDto } from './dto/payload-dto';
 import { Media } from 'src/media/media.model';
@@ -22,11 +21,11 @@ export class AnimalService {
     @InjectModel(Animal)
     private animalModel: typeof Animal,
     @InjectModel(Demande)
-    private demandeModel : typeof Demande,
-    private demandeService : DemandeService,
-    private tagService : TagService,
-    private mediaService : MediaService,
-    private animalTagService: AnimalTagService
+    private demandeModel: typeof Demande,
+    private demandeService: DemandeService,
+    private tagService: TagService,
+    private mediaService: MediaService,
+    private animalTagService: AnimalTagService,
   ) {}
 
   async create(createAnimalDto: CreateAnimalDto, req) {
@@ -43,77 +42,86 @@ export class AnimalService {
       description: createAnimalDto.description_animal,
       tags: createAnimalDto.tags,
       association_id: shelterId,
-      statut: 'En refuge'
+      statut: 'En refuge',
     });
 
-    const newMedia = await this.mediaService.create({
-      association_id : null,
-      animal_id : newAnimal.id,
-      url: "/images/animal_empty.webp",
-      ordre: 1
-    })
+    await this.mediaService.create({
+      association_id: null,
+      animal_id: newAnimal.id,
+      url: '/images/animal_empty.webp',
+      ordre: 1,
+    });
 
     if (tags) {
       for (const tag of tags) {
-        await this.animalTagService.addTag(newAnimal.id, tag)
+        await this.animalTagService.addTag(newAnimal.id, tag);
       }
     }
-    return { message : 'Animal successfully created' };
+    return { message: 'Animal successfully created' };
   }
 
   async findAll(): Promise<Animal[]> {
     const animals = await this.animalModel.findAll({
       include: [
-        "espece",
-        "images_animal",
-        "demandes",
-        { model : Association, as : "refuge", include: ["images_association"]},
-        { model : Famille, as : "accueillant"},
-        { model : Tag, as : "tags" },
+        'espece',
+        'images_animal',
+        'demandes',
+        { model: Association, as: 'refuge', include: ['images_association'] },
+        { model: Famille, as: 'accueillant' },
+        { model: Tag, as: 'tags' },
       ],
       /* where : {
         statut:'En refuge',
       } */
     });
-    return animals
+    return animals;
   }
 
-  async search(searchBodyDto : SearchBodyDto): Promise<Animal[]> {
+  async search(searchBodyDto: SearchBodyDto): Promise<Animal[]> {
     if (searchBodyDto.especeDropdownFull) {
-      searchBodyDto.especeDropdown = searchBodyDto.especeDropdownFull
+      searchBodyDto.especeDropdown = searchBodyDto.especeDropdownFull;
     } else {
-      searchBodyDto.especeDropdown = searchBodyDto.especeDropdownSmall
+      searchBodyDto.especeDropdown = searchBodyDto.especeDropdownSmall;
     }
-  
+
     const animals = await Animal.findAll({
-        include : [
-            "espece",
-            "images_animal",
-            { model : Association, as : "refuge"},
-            { model : Tag, as : "tags" }
-        ],
-        where : {
-            statut:'En refuge',
-            '$espece.nom$' : (searchBodyDto.especeDropdown) ? { [Op.like] : searchBodyDto.especeDropdown} : { [Op.ne]: null },
-            sexe : (searchBodyDto.sexe) ? (searchBodyDto.sexe) : { [Op.ne]: null },
-            '$refuge.code_postal$' : (searchBodyDto.dptSelect) ? { [Op.startsWith] : searchBodyDto.dptSelect } : { [Op.ne] : null },
-            age : (searchBodyDto.minAge && searchBodyDto.maxAge ) ? { [Op.between]:  [searchBodyDto.minAge, searchBodyDto.maxAge] } : { [Op.ne] : null },
-            '$tags.nom$' : (searchBodyDto.tag.length) ? { [Op.not] : searchBodyDto.tag } : { [Op.or] : [ { [Op.ne] : null }, { [Op.is] : null } ] },
-        }
+      include: [
+        'espece',
+        'images_animal',
+        { model: Association, as: 'refuge' },
+        { model: Tag, as: 'tags' },
+      ],
+      where: {
+        statut: 'En refuge',
+        '$espece.nom$': searchBodyDto.especeDropdown
+          ? { [Op.like]: searchBodyDto.especeDropdown }
+          : { [Op.ne]: null },
+        sexe: searchBodyDto.sexe ? searchBodyDto.sexe : { [Op.ne]: null },
+        '$refuge.code_postal$': searchBodyDto.dptSelect
+          ? { [Op.startsWith]: searchBodyDto.dptSelect }
+          : { [Op.ne]: null },
+        age:
+          searchBodyDto.minAge && searchBodyDto.maxAge
+            ? { [Op.between]: [searchBodyDto.minAge, searchBodyDto.maxAge] }
+            : { [Op.ne]: null },
+        '$tags.nom$': searchBodyDto.tag.length
+          ? { [Op.not]: searchBodyDto.tag }
+          : { [Op.or]: [{ [Op.ne]: null }, { [Op.is]: null }] },
+      },
     });
-  
-    return animals
+
+    return animals;
   }
 
   async findOne(id: string): Promise<Animal> {
     const animal = await this.animalModel.findByPk(id, {
       include: [
-        "espece",
-        "images_animal",
-        { model : Association, as : "refuge", include: ["images_association"]},
-        { model : Famille, as : "accueillant"},
-        { model : Tag, as : "tags" },
-      ]
+        'espece',
+        'images_animal',
+        { model: Association, as: 'refuge', include: ['images_association'] },
+        { model: Famille, as: 'accueillant' },
+        { model: Tag, as: 'tags' },
+      ],
     });
 
     if (!animal) {
@@ -123,49 +131,49 @@ export class AnimalService {
       });
     }
 
-    return animal
+    return animal;
   }
 
   async findRequested(id: string): Promise<Animal[]> {
     const requested = this.animalModel.findAll({
-      include : [
-        "images_animal",
-        "espece",
-        "demandes",
-        { model : Association, as : "refuge" },
+      include: [
+        'images_animal',
+        'espece',
+        'demandes',
+        { model: Association, as: 'refuge' },
       ],
-      where : {
-        association_id : id,
-        "$demandes.Demande.id$" : {[Op.ne] : null }
-      }
+      where: {
+        association_id: id,
+        '$demandes.Demande.id$': { [Op.ne]: null },
+      },
     });
 
     if (!requested) {
       throw new NotFoundException({
         status: 'error',
         message: `Shelter with id ${id} does not have animals requested for fostering`,
-      })
+      });
     }
 
-    return requested
+    return requested;
   }
 
-  async findAnimalRequests(id : string): Promise<Demande[]> {
+  async findAnimalRequests(id: string): Promise<Demande[]> {
     const animalRequests = await this.demandeModel.findAll({
-      include : [
-        "famille",
-        { model: Animal, as : "animal", include : ["refuge"]}
+      include: [
+        'famille',
+        { model: Animal, as: 'animal', include: ['refuge'] },
       ],
-      where : {
-        "$animal.id$" : id
-      }
+      where: {
+        '$animal.id$': id,
+      },
     });
 
     if (!animalRequests) {
       throw new NotFoundException({
         status: 'error',
-        message: `No request for Animal with id ${id} yet.`
-      })
+        message: `No request for Animal with id ${id} yet.`,
+      });
     }
 
     return animalRequests;
@@ -173,82 +181,84 @@ export class AnimalService {
 
   async findFostered(id: string): Promise<Animal[]> {
     const fostered = this.animalModel.findAll({
-      include : [
-        "images_animal",
-        "espece",
-        "accueillant",
-        { model : Tag, as : "tags" }
+      include: [
+        'images_animal',
+        'espece',
+        'accueillant',
+        { model: Tag, as: 'tags' },
       ],
-      where : {
-        statut : 'Accueilli'
-      }
+      where: {
+        statut: 'Accueilli',
+      },
     });
 
     if (!fostered) {
       throw new NotFoundException({
         status: 'error',
         message: `Shelter with id ${id} does not have animals currently fostered`,
-      })
+      });
     }
 
-    return fostered
+    return fostered;
   }
 
   async hostRequest(id: string, req) {
     const animalId = Number(id);
-    const familleId = req.user.foster
-    const animal = await this.animalModel.findByPk(id)
+    const familleId = req.user.foster;
+    const animal = await this.animalModel.findByPk(id);
 
     if (!animal) {
       throw new NotFoundException();
     }
 
     const found = await this.demandeService.findByExisting(familleId, animalId);
-    
+
     if (found) {
-      return { message : 'Vous avez déjà effectué une demande pour cet animal !' }
+      return {
+        message: 'Vous avez déjà effectué une demande pour cet animal !',
+      };
     }
 
     const date = new Date();
-    const newRequest = await this.demandeService.create({
-        famille_id : familleId,
-        animal_id : Number(animalId),
-        statut_demande:'En attente',
-        date_debut: date,
-        date_fin: new Date(date.setMonth(date.getMonth() + 8))
+    await this.demandeService.create({
+      famille_id: familleId,
+      animal_id: Number(animalId),
+      statut_demande: 'En attente',
+      date_debut: date,
+      date_fin: new Date(date.setMonth(date.getMonth() + 8)),
     });
     return {
-      message : 'Votre demande a bien été prise en compte !'
-    }
+      message: 'Votre demande a bien été prise en compte !',
+    };
   }
 
-  async uploadPhoto(file: Express.Multer.File, req){
-    const trim = '/uploads/' + file;
+  async uploadPhoto(file: Express.Multer.File, req) {
+    const trim = `/uploads/${JSON.stringify(file)}`;
     const animalId = req.body.animalId;
 
     const animal = await this.animalModel.findByPk(animalId, {
-        include : 'images_animal'
+      include: 'images_animal',
     });
 
     if (!animal) {
       throw new NotFoundException({
         status: 'error',
         message: `Animal with id ${animalId} does not exist`,
-      })
+      });
     }
 
     const newMedia = await Media.create({
-        animal_id : animal.id,
-        url : trim,
-        ordre : 1
-    })
+      animal_id: animal.id,
+      url: trim,
+      ordre: 1,
+    });
 
     await newMedia.save();
     const url = newMedia.url;
-    return { message : 'File uploaded successfully', animal, url}
+    return { message: 'File uploaded successfully', animal, url };
   }
 
-  async update(id: string, updateAnimalDto: UpdateAnimalDto) : Promise<Animal> {
+  async update(id: string, updateAnimalDto: UpdateAnimalDto): Promise<Animal> {
     const animal = await this.animalModel.findByPk(id);
 
     if (!animal) {
