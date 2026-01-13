@@ -1,15 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { EspeceService } from './espece.service';
-import { CreateEspeceDto } from './dto/create-espece.dto';
-import { UpdateEspeceDto } from './dto/update-espece.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('especes')
