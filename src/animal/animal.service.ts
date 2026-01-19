@@ -234,7 +234,7 @@ export class AnimalService {
 
   async uploadPhoto(file: Express.Multer.File, req) {
     const trim = `/uploads/${JSON.stringify(file)}`;
-    const animalId = req.body.animalId;
+    const animalId = req.body.animal_id;
 
     const animal = await this.animalModel.findByPk(animalId, {
       include: 'images_animal',
