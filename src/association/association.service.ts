@@ -7,8 +7,8 @@ import { CreateAssociationDto } from './dto/create-association.dto';
 import { UpdateAssociationDto } from './dto/update-association.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Association } from './association.model';
-import { SearchBodyDto } from './dto/payload-dto';
-import { Op } from 'sequelize';
+/* import { SearchBodyDto } from './dto/payload-dto';
+import { Op } from 'sequelize'; */
 import { Espece } from '../espece/espece.model';
 import { Animal } from '../animal/animal.model';
 import { Media } from '../media/media.model';
@@ -75,6 +75,7 @@ export class AssociationService {
     return shelters;
   }
 
+  /* 
   async search(searchBodyDto: SearchBodyDto): Promise<Association[]> {
     if (searchBodyDto.dptSelectFull) {
       searchBodyDto.dptSelect = searchBodyDto.dptSelectFull;
@@ -106,6 +107,7 @@ export class AssociationService {
 
     return associations;
   }
+  */
 
   async findOne(id: string): Promise<Association> {
     const shelter = await this.associationModel.findByPk(id, {

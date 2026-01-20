@@ -7,7 +7,7 @@ import { Association } from 'src/association/association.model';
 import { Famille } from 'src/famille/famille.model';
 import { Tag } from 'src/tag/tag.model';
 import { Op } from 'sequelize';
-import { SearchBodyDto } from './dto/payload-dto';
+/* import { SearchBodyDto } from './dto/payload-dto'; */
 import { Media } from 'src/media/media.model';
 import { DemandeService } from 'src/demande/demande.service';
 import { TagService } from 'src/tag/tag.service';
@@ -77,6 +77,7 @@ export class AnimalService {
     return animals;
   }
 
+  /* 
   async search(searchBodyDto: SearchBodyDto): Promise<Animal[]> {
     if (searchBodyDto.especeDropdownFull) {
       searchBodyDto.especeDropdown = searchBodyDto.especeDropdownFull;
@@ -112,6 +113,7 @@ export class AnimalService {
 
     return animals;
   }
+  */
 
   async findOne(id: string): Promise<Animal> {
     const animal = await this.animalModel.findByPk(id, {

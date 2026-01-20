@@ -1,4 +1,4 @@
-import {
+/* import {
   IsAlphanumeric,
   IsNumber,
   IsOptional,
@@ -19,4 +19,4 @@ export class SearchBodyDto {
 
   @IsOptional()
   readonly espece: string | Array<string>;
-}
+} */

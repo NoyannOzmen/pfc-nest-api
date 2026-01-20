@@ -1,4 +1,4 @@
-import {
+/* import {
   IsAlpha,
   IsNumber,
   IsOptional,
@@ -25,3 +25,4 @@ export class SearchBodyDto {
   @IsOptional()
   tag: string | Array<string>;
 }
+ */

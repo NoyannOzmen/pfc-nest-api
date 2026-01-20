@@ -15,7 +15,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { AssociationService } from './association.service';
 import { CreateAssociationDto } from './dto/create-association.dto';
 import { UpdateAssociationDto } from './dto/update-association.dto';
-import { SearchBodyDto } from './dto/payload-dto';
+/* import { SearchBodyDto } from './dto/payload-dto'; */
 import { SharpPipe } from '../pipes/sharp.pipe';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { AnimalService } from 'src/animal/animal.service';
@@ -55,11 +55,13 @@ export class AssociationController {
     return this.associationService.findAll();
   }
 
+  /* 
   @Public()
   @Post('associations')
   async search(@Body() body: SearchBodyDto) {
     return this.associationService.search(body);
   }
+  */
 
   @Public()
   @Get('associations/:id')
