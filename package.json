@@ -79,6 +79,24 @@
     },
     "@angular-devkit/core" : {
       "ajv": ">=8.18.0"
+    },
+    "@xhmikosr/decompress-tar" : {
+      "file-type": ">=21.3.2"
+    },
+    "@xhmikosr/decompress-tarbz2" : {
+      "file-type": ">=21.3.2"
+    },
+    "@xhmikosr/decompress-targz" : {
+      "file-type": ">=21.3.2"
+    },
+    "@xhmikosr/archive-type" : {
+      "file-type": ">=21.3.2"
+    },
+    "@xhmikosr/decompress-unzip" : {
+      "file-type": ">=21.3.2"
+    },
+    "@xhmikosr/downloader" : {
+      "file-type": ">=21.3.2"
     }
   },
   "jest": {
