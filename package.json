@@ -104,6 +104,9 @@
     },
     "@xhmikosr/downloader" : {
       "file-type": ">=21.3.2"
+    },
+    "sequelize" : {
+      "uuid": ">=14.0.0"
     }
   },
   "jest": {
