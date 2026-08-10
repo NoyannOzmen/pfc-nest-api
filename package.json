@@ -36,7 +36,7 @@
     "rxjs": "^7.8.2",
     "sequelize": "^6.37.7",
     "sequelize-typescript": "^2.1.6",
-    "sharp": "^0.34.5"
+    "sharp": "^0.35.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
@@ -80,32 +80,32 @@
     "@nestjs/serve-static": {
       "path-to-regexp": ">=8.4.0"
     },
-    "terser-webpack-plugin" : {
+    "terser-webpack-plugin": {
       "serialize-javascript": ">=7.0.3"
     },
-    "@angular-devkit/core" : {
+    "@angular-devkit/core": {
       "ajv": ">=8.18.0",
       "picomatch": ">=4.0.4"
     },
-    "@xhmikosr/decompress-tar" : {
+    "@xhmikosr/decompress-tar": {
       "file-type": ">=21.3.2"
     },
-    "@xhmikosr/decompress-tarbz2" : {
+    "@xhmikosr/decompress-tarbz2": {
       "file-type": ">=21.3.2"
     },
-    "@xhmikosr/decompress-targz" : {
+    "@xhmikosr/decompress-targz": {
       "file-type": ">=21.3.2"
     },
-    "@xhmikosr/archive-type" : {
+    "@xhmikosr/archive-type": {
       "file-type": ">=21.3.2"
     },
-    "@xhmikosr/decompress-unzip" : {
+    "@xhmikosr/decompress-unzip": {
       "file-type": ">=21.3.2"
     },
-    "@xhmikosr/downloader" : {
+    "@xhmikosr/downloader": {
       "file-type": ">=21.3.2"
     },
-    "sequelize" : {
+    "sequelize": {
       "uuid": ">=14.0.0"
     }
   },
